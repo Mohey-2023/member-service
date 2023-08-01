@@ -32,14 +32,14 @@ public class Member {
 	private GenderEnum gender;
 
 	@Column(nullable = false)
-	private LocalDateTime birthDate;
+	private String birthDate;
 
 	@CreatedDate
 	@Column(nullable = false)
 	private LocalDateTime createdDatetime;
 
 	@Builder
-	public Member(long id, String memberUuid, GenderEnum gender, LocalDateTime birthDate,
+	public Member(long id, String memberUuid, GenderEnum gender, String birthDate,
 		LocalDateTime createdDatetime) {
 		this.id = id;
 		this.memberUuid = memberUuid;
