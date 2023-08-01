@@ -1,0 +1,1 @@
+package com.mohey.memberservice.dto;import com.mohey.memberservice.domain.Member;import lombok.Getter;@Getterpublic class JoinRespDto {	private String memberUuid;	public JoinRespDto(Member member) {		this.memberUuid = member.getMemberUuid();	}}
