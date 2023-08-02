@@ -30,7 +30,7 @@ public class MemberDevice {
 	@Id
 	Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "member_id")
 	Member memberId;
 

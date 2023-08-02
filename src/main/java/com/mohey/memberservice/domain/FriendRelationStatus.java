@@ -16,6 +16,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static javax.persistence.FetchType.LAZY;
+
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Getter
@@ -26,7 +28,7 @@ public class FriendRelationStatus {
 	@Id
 	Long id;
 
-	@OneToOne
+	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "friend_relation_id")
 	FriendRelation friendRelationId;
 
