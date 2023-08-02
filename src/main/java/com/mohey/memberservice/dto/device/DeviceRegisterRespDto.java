@@ -1,0 +1,1 @@
+package com.mohey.memberservice.dto.device;import com.mohey.memberservice.domain.Member;import lombok.Getter;@Getterpublic class DeviceRegisterRespDto {	private String memberUuid;	public DeviceRegisterRespDto(Member member) {		this.memberUuid = member.getMemberUuid();	}}

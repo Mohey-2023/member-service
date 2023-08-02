@@ -1,12 +1,20 @@
 package com.mohey.memberservice.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
@@ -14,26 +22,26 @@ import java.time.LocalDateTime;
 @Entity
 public class FriendRelation {
 
-    @GeneratedValue
-    @Id
-    long id;
+	@GeneratedValue
+	@Id
+	long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    Member memberId;
+	@ManyToOne
+	@JoinColumn(name = "member_id")
+	Member memberId;
 
-    @ManyToOne
-    @JoinColumn(name = "friend_id")
-    Member friendId;
+	@ManyToOne
+	@JoinColumn(name = "friend_id")
+	Member friendId;
 
-    @Column(nullable = false)
-    private Boolean favoriteStatus;
+	@Column(nullable = false)
+	private Boolean favoriteStatus;
 
-    @Column(nullable = false)
-    private Boolean fiendStatus;
+	@Column(nullable = false)
+	private Boolean fiendStatus;
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdDatetime;
+	@CreatedDate
+	@Column(nullable = false)
+	private LocalDateTime createdDatetime;
 
 }

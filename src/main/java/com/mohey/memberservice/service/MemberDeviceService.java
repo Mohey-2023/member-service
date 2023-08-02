@@ -1,0 +1,1 @@
+package com.mohey.memberservice.service;import com.mohey.memberservice.dto.device.DeviceRegisterReqDto;import com.mohey.memberservice.dto.device.DeviceRegisterRespDto;public interface MemberDeviceService {	public DeviceRegisterRespDto registerDevice(DeviceRegisterReqDto deviceRegisterReqDto);}
