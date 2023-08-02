@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class MemberProfileImage {
 	@GeneratedValue
 	@Id
-	long id;
+	Long id;
 
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "member_id")

@@ -27,7 +27,7 @@ public class MemberDeviceAliveStatus {
 
 	@GeneratedValue
 	@Id
-	long id;
+	Long id;
 
 	@OneToOne(fetch = LAZY)
 	@JoinColumn(name = "member_device_id")

@@ -28,7 +28,7 @@ public class MemberDevice {
 
 	@GeneratedValue
 	@Id
-	long id;
+	Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "member_id")

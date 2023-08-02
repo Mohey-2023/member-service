@@ -24,7 +24,7 @@ public class FriendRelation {
 
 	@GeneratedValue
 	@Id
-	long id;
+	Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "member_id")

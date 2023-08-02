@@ -8,7 +8,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,18 +20,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-public class FriendRequest {
+public class FriendRelationStatus {
+
 	@GeneratedValue
 	@Id
 	Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "member_id")
-	Member memberId;
+	@OneToOne
+	@JoinColumn(name = "friend_relation_id")
+	FriendRelation friendRelationId;
 
-	@ManyToOne
-	@JoinColumn(name = "response_id")
-	Member responseId;
+	@Column(nullable = false)
+	private Boolean friendStatus;
 
 	@CreatedDate
 	@Column(nullable = false)

@@ -23,7 +23,7 @@ public class Member {
 
 	@GeneratedValue
 	@Id
-	long id;
+	Long id;
 
 	@Column(nullable = false, length = 36)
 	private String memberUuid;

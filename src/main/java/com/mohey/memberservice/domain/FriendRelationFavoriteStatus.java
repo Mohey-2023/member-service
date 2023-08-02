@@ -1,31 +1,40 @@
 package com.mohey.memberservice.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Getter
 @Entity
 public class FriendRelationFavoriteStatus {
 
-    @GeneratedValue
-    @Id
-    long id;
+	@GeneratedValue
+	@Id
+	Long id;
 
-    @OneToOne
-    @JoinColumn(name = "friend_relation_id")
-    FriendRelation friendRelationId;
+	@OneToOne
+	@JoinColumn(name = "friend_relation_id")
+	FriendRelation friendRelationId;
 
-    @Column(nullable = false)
-    private Boolean favoriteStatus;
+	@Column(nullable = false)
+	private Boolean favoriteStatus;
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdDatetime;
+	@CreatedDate
+	@Column(nullable = false)
+	private LocalDateTime createdDatetime;
 
 }
