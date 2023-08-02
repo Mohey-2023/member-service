@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-public class MemberProfileImage {
+public class MemberInterest {
 	@GeneratedValue
 	@Id
 	long id;
@@ -32,18 +32,18 @@ public class MemberProfileImage {
 	@JoinColumn(name = "member_id")
 	Member memberId;
 
-	@Column(nullable = false, length = 255)
-	private String profileUrl;
+	@Column(nullable = false, length = 10)
+	private String interest;
 
 	@CreatedDate
 	@Column(nullable = false)
 	private LocalDateTime createdDatetime;
 
 	@Builder
-	public MemberProfileImage(long id, Member memberId, String profileUrl, LocalDateTime createdDatetime) {
+	public MemberInterest(long id, Member memberId, String interest, LocalDateTime createdDatetime) {
 		this.id = id;
 		this.memberId = memberId;
-		this.profileUrl = profileUrl;
+		this.interest = interest;
 		this.createdDatetime = createdDatetime;
 	}
 }
