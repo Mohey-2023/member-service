@@ -8,5 +8,5 @@ import com.mohey.memberservice.domain.MemberInterest;
 import java.util.List;
 
 public interface MemberInterestRepository extends JpaRepository<MemberInterest, Long> {
-    List<MemberInterest> findMemberInterestsByMemberId(Member member);
+    List<MemberInterest> findTop3ByMemberIdOrderByCreatedDatetimeDesc(Member member);
 }
