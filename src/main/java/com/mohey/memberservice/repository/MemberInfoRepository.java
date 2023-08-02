@@ -1,5 +1,6 @@
 package com.mohey.memberservice.repository;
 
+import com.mohey.memberservice.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,5 +22,5 @@ public interface MemberInfoRepository extends JpaRepository<MemberInfo, Long> {
 			"WHERE M.id = :id")
 	GetInfoRespDto getUserInfo(@Param("id") Long id);
 
-
+	MemberInfo findMemberInfoByMemberId(Member member);
 }
