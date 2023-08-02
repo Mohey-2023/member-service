@@ -1,0 +1,1 @@
+package com.mohey.memberservice.service;import com.mohey.memberservice.dto.JoinReqDto;import com.mohey.memberservice.dto.JoinRespDto;public interface MemberJoinService {	public JoinRespDto register(JoinReqDto joinReqDto);}
