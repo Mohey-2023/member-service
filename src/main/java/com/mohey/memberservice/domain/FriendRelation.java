@@ -38,7 +38,7 @@ public class FriendRelation {
 	private Boolean favoriteStatus;
 
 	@Column(nullable = false)
-	private Boolean fiendStatus;
+	private Boolean friendStatus;
 
 	@CreatedDate
 	@Column(nullable = false)

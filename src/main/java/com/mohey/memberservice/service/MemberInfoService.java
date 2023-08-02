@@ -1,1 +1,1 @@
-package com.mohey.memberservice.service;import com.mohey.memberservice.dto.memberInfo.getInfoRespDto;public interface MemberInfoService {	public getInfoRespDto getInfo(String uuid);}
+package com.mohey.memberservice.service;import com.mohey.memberservice.dto.memberInfo.GetInfoRespDto;public interface MemberInfoService {	public GetInfoRespDto getInfo(String uuid);}
