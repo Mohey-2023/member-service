@@ -2,14 +2,9 @@ package com.mohey.memberservice.domain;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
+import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -22,13 +17,14 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table(name = "friend_request_tb")
 public class FriendRequest {
 	@GeneratedValue
 	@Id
 	Long id;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "member_tb_id")
 	Member memberId;
 
 	@ManyToOne(fetch = LAZY)
@@ -38,5 +34,11 @@ public class FriendRequest {
 	@CreatedDate
 	@Column(nullable = false)
 	private LocalDateTime createdDatetime;
-
+	@Builder
+	public FriendRequest(Long id, Member memberId, Member responseId, LocalDateTime createdDatetime) {
+		this.id = id;
+		this.memberId = memberId;
+		this.responseId = responseId;
+		this.createdDatetime = createdDatetime;
+	}
 }

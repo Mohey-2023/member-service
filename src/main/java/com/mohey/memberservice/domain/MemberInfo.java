@@ -4,13 +4,7 @@ import static javax.persistence.FetchType.*;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -23,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
+@Table(name  ="member_info_tb")
 public class MemberInfo {
 
 	@GeneratedValue
@@ -30,7 +25,7 @@ public class MemberInfo {
 	Long id;
 
 	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "member_tb_id")
 	Member memberId;
 
 	@Column(nullable = false, length = 100)
