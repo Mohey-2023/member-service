@@ -1,0 +1,1 @@
+package com.mohey.memberservice.domain;public enum AlarmStatusEnum {	YES("승인"), NO("거절"), WAIT("대기");	private final String value;	AlarmStatusEnum(String value) {		this.value = value;	}	public String getValue() {		return value;	}}
