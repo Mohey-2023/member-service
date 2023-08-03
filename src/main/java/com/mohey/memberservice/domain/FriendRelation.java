@@ -1,17 +1,24 @@
 package com.mohey.memberservice.domain;
 
+import static javax.persistence.FetchType.*;
+
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import static javax.persistence.FetchType.LAZY;
 
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
@@ -41,8 +48,10 @@ public class FriendRelation {
 	@CreatedDate
 	@Column(nullable = false)
 	private LocalDateTime createdDatetime;
+
 	@Builder
-	public FriendRelation(Long id, Member memberId, Member friendId, Boolean favoriteStatus, Boolean friendStatus, LocalDateTime createdDatetime) {
+	public FriendRelation(Long id, Member memberId, Member friendId, Boolean favoriteStatus, Boolean friendStatus,
+		LocalDateTime createdDatetime) {
 		this.id = id;
 		this.memberId = memberId;
 		this.friendId = friendId;
@@ -51,7 +60,12 @@ public class FriendRelation {
 		this.createdDatetime = createdDatetime;
 	}
 
-	public void changeFavoriteStatus(boolean bol){
-		this.favoriteStatus=bol;
+	public void changeFavoriteStatus(boolean bol) {
+		this.favoriteStatus = bol;
 	}
+
+	public void changeFriendStatus(boolean bol) {
+		this.friendStatus = bol;
+	}
+
 }
