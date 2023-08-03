@@ -7,10 +7,10 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -19,53 +19,39 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
-@Table(name = "friend_relation_tb")
-public class FriendRelation {
-
-	@GeneratedValue
+@Table(name = "friend_requst_status_tb")
+public class FriendRequestStatus {
 	@Id
-	Long id;
-
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_tb_id")
-	Member memberId;
-
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "friend_id")
-	Member friendId;
+	private Long id;
+	@OneToOne(fetch = LAZY)
+	@MapsId
+	@JoinColumn(name = "friend_request_id")
+	private FriendRequest friendRequest;
 
 	@Column(nullable = false)
-	private Boolean favoriteStatus;
-
-	@Column(nullable = false)
-	private Boolean friendStatus;
+	private AlarmStatusEnum status;
 
 	@CreatedDate
 	@Column(nullable = false)
 	private LocalDateTime createdDatetime;
 
 	@Builder
-	public FriendRelation(Long id, Member memberId, Member friendId, Boolean favoriteStatus, Boolean friendStatus,
+	public FriendRequestStatus(Long id, FriendRequest friendRequest, AlarmStatusEnum status,
 		LocalDateTime createdDatetime) {
 		this.id = id;
-		this.memberId = memberId;
-		this.friendId = friendId;
-		this.favoriteStatus = favoriteStatus;
-		this.friendStatus = friendStatus;
+		this.friendRequest = friendRequest;
+		this.status = status;
 		this.createdDatetime = createdDatetime;
 	}
 
-	public void changeFavoriteStatus(boolean bol) {
-		this.favoriteStatus = bol;
+	public void changeStatus(AlarmStatusEnum status) {
+		this.status = status;
 	}
-
-	public void changeFriendStatus(boolean bol) {
-		this.friendStatus = bol;
-	}
-
 }

@@ -1,46 +1,44 @@
 package com.mohey.memberservice.domain;
 
-import static javax.persistence.FetchType.*;
-
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
+import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import static javax.persistence.FetchType.LAZY;
 
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name  ="member_device_alive_status_tb")
-public class MemberDeviceAliveStatus {
+@Table(name = "friend_relation_status_tb")
+public class FriendRelationStatus {
 
 	@GeneratedValue
 	@Id
 	Long id;
 
 	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "member_device_id")
-	MemberDevice memberDeviceId;
+	@JoinColumn(name = "friend_relation_id")
+	FriendRelation friendRelationId;
 
 	@Column(nullable = false)
-	private Boolean aliveStatus = true;
+	private Boolean friendStatus;
 
 	@CreatedDate
 	@Column(nullable = false)
 	private LocalDateTime createdDatetime;
-
 	@Builder
-	public MemberDeviceAliveStatus(long id, MemberDevice memberDeviceId, Boolean aliveStatus,
-		LocalDateTime createdDatetime) {
+	public FriendRelationStatus(Long id, FriendRelation friendRelationId, Boolean friendStatus, LocalDateTime createdDatetime) {
 		this.id = id;
-		this.memberDeviceId = memberDeviceId;
-		this.aliveStatus = aliveStatus;
+		this.friendRelationId = friendRelationId;
+		this.friendStatus = friendStatus;
 		this.createdDatetime = createdDatetime;
 	}
 }

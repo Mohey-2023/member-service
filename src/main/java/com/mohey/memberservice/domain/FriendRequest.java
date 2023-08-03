@@ -1,32 +1,71 @@
 package com.mohey.memberservice.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import static javax.persistence.FetchType.*;
+
+import java.time.LocalDateTime;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@JsonIdentityInfo(
+	generator = ObjectIdGenerators.PropertyGenerator.class,
+	property = "id")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
+@Table(name = "friend_request_tb")
 public class FriendRequest {
-    @GeneratedValue
-    @Id
-    long id;
+	@GeneratedValue
+	@Id
+	Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    Member memberId;
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "member_tb_id")
+	Member memberId;
 
-    @ManyToOne
-    @JoinColumn(name = "response_id")
-    Member responseId;
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "response_id")
+	Member responseId;
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdDatetime;
+	@OneToOne(mappedBy = "friendRequest", cascade = CascadeType.ALL, fetch = LAZY)
+	private FriendRequestStatus friendRequestStatus;
 
+	@CreatedDate
+	@Column(nullable = false)
+	private LocalDateTime createdDatetime;
+
+	@Column(nullable = false, length = 36)
+	private String alarmUuid;
+
+	@Builder
+	public FriendRequest(Long id, Member memberId, String alarmUuid, Member responseId, LocalDateTime createdDatetime
+		, FriendRequestStatus friendRequestStatus) {
+		this.id = id;
+		this.memberId = memberId;
+		this.responseId = responseId;
+		this.alarmUuid = alarmUuid;
+		this.createdDatetime = createdDatetime;
+		this.friendRequestStatus = friendRequestStatus;
+	}
 }

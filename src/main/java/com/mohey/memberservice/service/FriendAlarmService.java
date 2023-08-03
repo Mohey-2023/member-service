@@ -1,0 +1,1 @@
+package com.mohey.memberservice.service;import com.mohey.memberservice.dto.memberalram.FriendReqAlarmReqDto;import com.mohey.memberservice.dto.memberalram.FriendReqAlarmRespDto;public interface FriendAlarmService {	FriendReqAlarmRespDto sendAlarm(FriendReqAlarmReqDto friendReqAlarmReqDto, String uuid);}

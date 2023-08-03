@@ -1,0 +1,1 @@
+package com.mohey.memberservice.dto.memberFriend;import com.mohey.memberservice.domain.FriendRelation;import lombok.Getter;@Getterpublic class FriendStarRespDto {	private FriendRelation friendRelation;	public FriendStarRespDto(FriendRelation friendRelation) {		this.friendRelation = friendRelation;	}}
