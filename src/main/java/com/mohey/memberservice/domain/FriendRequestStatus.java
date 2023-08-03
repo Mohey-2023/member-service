@@ -30,9 +30,10 @@ import lombok.Setter;
 public class FriendRequestStatus {
 	@Id
 	private Long id;
+
 	@OneToOne(fetch = LAZY)
 	@MapsId
-	@JoinColumn(name = "friend_request_id")
+	@JoinColumn(name = "id")
 	private FriendRequest friendRequest;
 
 	@Column(nullable = false)

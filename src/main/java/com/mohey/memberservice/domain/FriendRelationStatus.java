@@ -25,7 +25,7 @@ public class FriendRelationStatus {
 	Long id;
 
 	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "friend_relation_id")
+	@JoinColumn(name = "friend_relation_tb_id")
 	FriendRelation friendRelationId;
 
 	@Column(nullable = false)
