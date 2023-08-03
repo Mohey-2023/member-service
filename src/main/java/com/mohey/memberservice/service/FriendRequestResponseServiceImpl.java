@@ -16,6 +16,8 @@ import com.mohey.memberservice.ex.CustomApiException;
 import com.mohey.memberservice.repository.FriendRelationFavoriteStatusRepository;
 import com.mohey.memberservice.repository.FriendRelationRepository;
 import com.mohey.memberservice.repository.FriendRelationStatusRepository;
+import com.mohey.memberservice.repository.FriendRequestRepository;
+import com.mohey.memberservice.repository.FriendRequestStatusRepository;
 import com.mohey.memberservice.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 	private final FriendRelationStatusRepository friendRelationStatusRepository;
 	private final FriendRelationRepository friendRelationRepository;
 	private final FriendRelationFavoriteStatusRepository friendRelationFavoriteStatusRepository;
+	private final FriendRequestRepository friendRequestRepository;
+	private final FriendRequestStatusRepository friendRequestStatusRepository;
 
 	@Transactional
 	@Override
@@ -56,6 +60,21 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			FriendRelation friendRelation = friendRelationRepository.save(
 				friendRegisterReqDto.toFriendRelationEntity(my, friend));
 			friendRelationStatusRepository.save(friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
+			//친구 신청의 상태 승인으로 바꿔주기
+
+			// FriendRequest friendRequest = friendRequestRepository.findFriendRequestByAlarmUuid(
+			// 	friendRegisterReqDto.getAlarmUuid());
+			// System.out.println("저저ㅓ보옹" + friendRequest.getAlarmUuid());
+			//
+			// Optional<FriendRequestStatus> friendRequestStatus = friendRequestStatusRepository.findById(
+			// 	friendRequest.getId());
+			// if (friendRequestStatus.isPresent()) {
+			// 	friendRequestStatus.get().changeStatus(AlarmStatusEnum.valueOf("YES"));
+			//
+			// } else {
+			// 	throw new CustomApiException("친구요청 상태변경 실패");
+			// }
+
 			return new FriendRegisterRespDto(friendRelation);
 		} catch (DataIntegrityViolationException e) {
 			throw new CustomApiException("친구등록 실패");

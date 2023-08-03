@@ -1,5 +1,7 @@
 package com.mohey.memberservice.controller;
 
+import java.util.UUID;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,8 @@ public class FriendAlarmController {
 	@PostMapping("/send")
 	public ResponseEntity<?> sendAlarm(@RequestBody @Valid FriendReqAlarmReqDto friendReqAlarmReqDto,
 		BindingResult bindingResult) {
-		FriendReqAlarmRespDto friendReqAlarmRespDto = friendAlarmService.sendAlarm(friendReqAlarmReqDto);
+		String Uuid = UUID.randomUUID().toString();
+		FriendReqAlarmRespDto friendReqAlarmRespDto = friendAlarmService.sendAlarm(friendReqAlarmReqDto, Uuid);
 
 		//알람 보내기
 		return new ResponseEntity<>(new ResponseDto<>(1, "알람 보내기 성공", friendReqAlarmRespDto), HttpStatus.CREATED);

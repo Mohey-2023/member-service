@@ -22,8 +22,10 @@ import com.mohey.memberservice.dto.memberFriend.FriendRegisterReqDto;
 import com.mohey.memberservice.dto.memberFriend.FriendStarReqDto;
 import com.mohey.memberservice.dto.memberjoin.JoinReqDto;
 import com.mohey.memberservice.repository.FriendRelationRepository;
+import com.mohey.memberservice.repository.FriendRequestRepository;
 import com.mohey.memberservice.repository.MemberInfoRepository;
 import com.mohey.memberservice.repository.MemberRepository;
+import com.mohey.memberservice.service.FriendAlarmService;
 
 @Transactional
 @AutoConfigureMockMvc
@@ -39,8 +41,15 @@ class FriendRequestResponseControllerTest {
 	private MemberInfoRepository memberInfoRepository;
 	@Autowired
 	private FriendRelationRepository friendRelationRepository;
+	@Autowired
+	private FriendAlarmService friendAlarmService;
+	@Autowired
+	private FriendRequestRepository friendRequestRepository;
+
 	static final String memberUuid = UUID.randomUUID().toString();
 	static final String friendUuid = UUID.randomUUID().toString();
+
+	static final String alarmUuid = UUID.randomUUID().toString();
 
 	@BeforeEach
 	public void setUp() {
@@ -79,6 +88,17 @@ class FriendRequestResponseControllerTest {
 				.build();
 		friendRelationRepository.save(friendRelation2);
 
+		//요청 정보 사항 저장
+		// FriendReqAlarmReqDto friendReqAlarmReqDto = new FriendReqAlarmReqDto();
+		// FriendRequest friendRequest =
+		// 	friendReqAlarmReqDto.toFriendRequestEntity(member, member2, null, alarmUuid);
+		// FriendRequestStatus friendRequestStatus = FriendRequestStatus.builder()
+		// 	.status(AlarmStatusEnum.valueOf("WAIT"))
+		// 	.build();
+		// friendRequestStatus.setFriendRequest(friendRequest); // FriendRequest와 연결
+		// friendRequest.setFriendRequestStatus(friendRequestStatus); // 양방향 연관관계 설정
+		// friendRequestRepository.save(friendRequest);
+
 		joinReqDto.setNickname("qqq");
 		joinReqDto.setProfile_url("aaaaa");
 		joinReqDto.setSelfIntroduction("hahahahahaha");
@@ -93,6 +113,7 @@ class FriendRequestResponseControllerTest {
 		FriendRegisterReqDto friendRegisterReqDto = new FriendRegisterReqDto();
 		friendRegisterReqDto.setMyUuid(memberUuid);
 		friendRegisterReqDto.setFriendUuid(friendUuid);
+		friendRegisterReqDto.setAlarmUuid(alarmUuid);
 		String requestBody = om.writeValueAsString(friendRegisterReqDto);
 		System.out.println("테스트 : " + requestBody);
 

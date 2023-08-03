@@ -50,4 +50,8 @@ public class FriendRequestStatus {
 		this.status = status;
 		this.createdDatetime = createdDatetime;
 	}
+
+	public void changeStatus(AlarmStatusEnum status) {
+		this.status = status;
+	}
 }
