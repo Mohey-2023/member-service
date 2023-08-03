@@ -29,7 +29,7 @@ public class MemberDeviceNotiStatus {
 	MemberDevice memberDeviceId;
 
 	@Column(nullable = false)
-	private Boolean notiStatus = true;
+	private Boolean notiStatus ;
 
 	@CreatedDate
 	@Column(nullable = false)

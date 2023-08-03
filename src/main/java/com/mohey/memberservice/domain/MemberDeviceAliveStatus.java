@@ -29,7 +29,7 @@ public class MemberDeviceAliveStatus {
 	MemberDevice memberDeviceId;
 
 	@Column(nullable = false)
-	private Boolean aliveStatus = true;
+	private Boolean aliveStatus ;
 
 	@CreatedDate
 	@Column(nullable = false)
