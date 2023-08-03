@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mohey.memberservice.domain.MemberDeviceNotiStatus;
 import com.mohey.memberservice.dto.ResponseDto;
 import com.mohey.memberservice.dto.memberalram.FriendReqAlarmReqDto;
 import com.mohey.memberservice.dto.memberalram.FriendReqAlarmRespDto;
@@ -33,6 +34,16 @@ public class FriendAlarmController {
 
 		//알람 보내기
 		return new ResponseEntity<>(new ResponseDto<>(1, "알람 보내기 성공", friendReqAlarmRespDto), HttpStatus.CREATED);
+	}
+
+	@PostMapping("/change")
+	public ResponseEntity<?> stopAlarm(@RequestBody @Valid String deviceId,
+		BindingResult bindingResult) {
+
+		MemberDeviceNotiStatus memberDeviceNotiStatus = friendAlarmService.stopAlarm(deviceId);
+
+		//알람 보내기
+		return new ResponseEntity<>(new ResponseDto<>(1, "알림변경 성공", memberDeviceNotiStatus), HttpStatus.CREATED);
 	}
 
 }
