@@ -17,10 +17,12 @@ public class FriendReqAlarmReqDto {
 	@NonNull
 	private String friendUuid;
 
-	public FriendRequest toFriendRequestEntity(Member my, Member friend, FriendRequestStatus friendRequestStatus) {
+	public FriendRequest toFriendRequestEntity(Member my, Member friend, FriendRequestStatus friendRequestStatus,
+		String alarmUuid) {
 		return FriendRequest.builder()
 			.memberId(my)
 			.responseId(friend)
+			.alarmUuid(alarmUuid)
 			.friendRequestStatus(friendRequestStatus)
 			.build();
 	}

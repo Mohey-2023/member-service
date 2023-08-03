@@ -55,12 +55,16 @@ public class FriendRequest {
 	@Column(nullable = false)
 	private LocalDateTime createdDatetime;
 
+	@Column(nullable = false, length = 36)
+	private String alarmUuid;
+
 	@Builder
-	public FriendRequest(Long id, Member memberId, Member responseId, LocalDateTime createdDatetime
+	public FriendRequest(Long id, Member memberId, String alarmUuid, Member responseId, LocalDateTime createdDatetime
 		, FriendRequestStatus friendRequestStatus) {
 		this.id = id;
 		this.memberId = memberId;
 		this.responseId = responseId;
+		this.alarmUuid = alarmUuid;
 		this.createdDatetime = createdDatetime;
 		this.friendRequestStatus = friendRequestStatus;
 	}
