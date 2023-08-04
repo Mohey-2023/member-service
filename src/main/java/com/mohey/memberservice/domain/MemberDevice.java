@@ -25,7 +25,7 @@ public class MemberDevice {
 	Long id;
 
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "member_tb_id")
+	@JoinColumn(name = "member_id")
 	Member memberId;
 
 	@Column(nullable = false, length = 36)

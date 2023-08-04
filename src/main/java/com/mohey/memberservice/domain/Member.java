@@ -2,7 +2,14 @@ package com.mohey.memberservice.domain;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name  ="member_tb")
+@Table(name = "member_tb")
 public class Member {
 
 	@GeneratedValue
@@ -25,6 +32,7 @@ public class Member {
 	@Column(nullable = false, length = 36)
 	private String memberUuid;
 
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private GenderEnum gender;
 

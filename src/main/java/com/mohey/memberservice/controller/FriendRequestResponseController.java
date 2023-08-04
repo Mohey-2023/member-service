@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mohey.memberservice.domain.FriendRequestStatus;
 import com.mohey.memberservice.dto.ResponseDto;
 import com.mohey.memberservice.dto.memberFriend.FriendDeleteReqDto;
 import com.mohey.memberservice.dto.memberFriend.FriendDeleteRespDto;
@@ -53,4 +54,12 @@ public class FriendRequestResponseController {
 		return new ResponseEntity<>(new ResponseDto<>(1, "친구삭제 성공", friendDeleteRespDto), HttpStatus.OK);
 	}
 
+	@PostMapping("/reject")
+	public ResponseEntity<?> reject(@RequestBody @Valid String alarmUuid,
+		BindingResult bindingResult) {
+
+		FriendRequestStatus friendRequestStatus = friendRequestResponseService.reject(alarmUuid);
+
+		return new ResponseEntity<>(new ResponseDto<>(1, "친구거절 성공", friendRequestStatus), HttpStatus.OK);
+	}
 }

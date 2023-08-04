@@ -1,10 +1,15 @@
 package com.mohey.memberservice.service;
 
+import java.util.Optional;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mohey.memberservice.domain.AlarmStatusEnum;
 import com.mohey.memberservice.domain.FriendRelation;
+import com.mohey.memberservice.domain.FriendRequest;
+import com.mohey.memberservice.domain.FriendRequestStatus;
 import com.mohey.memberservice.domain.Member;
 import com.mohey.memberservice.dto.memberFriend.FriendDeleteReqDto;
 import com.mohey.memberservice.dto.memberFriend.FriendDeleteRespDto;
@@ -62,18 +67,18 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			friendRelationStatusRepository.save(friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
 			//친구 신청의 상태 승인으로 바꿔주기
 
-			// FriendRequest friendRequest = friendRequestRepository.findFriendRequestByAlarmUuid(
-			// 	friendRegisterReqDto.getAlarmUuid());
-			// System.out.println("저저ㅓ보옹" + friendRequest.getAlarmUuid());
-			//
-			// Optional<FriendRequestStatus> friendRequestStatus = friendRequestStatusRepository.findById(
-			// 	friendRequest.getId());
-			// if (friendRequestStatus.isPresent()) {
-			// 	friendRequestStatus.get().changeStatus(AlarmStatusEnum.valueOf("YES"));
-			//
-			// } else {
-			// 	throw new CustomApiException("친구요청 상태변경 실패");
-			// }
+			FriendRequest friendRequest = friendRequestRepository.findFriendRequestByAlarmUuid(
+				friendRegisterReqDto.getAlarmUuid());
+			System.out.println("저저ㅓ보옹" + friendRequest.getAlarmUuid());
+
+			Optional<FriendRequestStatus> friendRequestStatus = friendRequestStatusRepository.findById(
+				friendRequest.getId());
+			if (friendRequestStatus.isPresent()) {
+				friendRequestStatus.get().changeStatus(AlarmStatusEnum.valueOf("YES"));
+
+			} else {
+				throw new CustomApiException("친구요청 상태변경 실패");
+			}
 
 			return new FriendRegisterRespDto(friendRelation);
 		} catch (DataIntegrityViolationException e) {
@@ -137,6 +142,27 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			return new FriendDeleteRespDto(friendRelation);
 		} catch (DataIntegrityViolationException e) {
 			throw new CustomApiException("친구삭제 실패");
+		}
+	}
+
+	@Override
+	public FriendRequestStatus reject(String alarmUuid) {
+		//알람 유유아이디로freindRequest객체 받아오고 그 pk로
+		//친구신청 상태 테이블 가져와서 그냥 그 상태값을 NO로 바꾸면 끝. 그리고 반환
+		try {
+			FriendRequest friendRequest = friendRequestRepository.findFriendRequestByAlarmUuid(alarmUuid);
+			if (friendRequest == null) {
+				throw new CustomApiException("신청 정보가 없어요");
+			}
+			FriendRequestStatus friendRequestStatus = friendRequestStatusRepository.findFriendRequestStatusById(
+				friendRequest.getId());
+			if (friendRequestStatus == null) {
+				throw new CustomApiException("신청 정보가 없어요");
+			}
+			friendRequestStatus.changeStatus(AlarmStatusEnum.valueOf("NO"));
+			return friendRequestStatus;
+		} catch (DataIntegrityViolationException e) {
+			throw new CustomApiException("친구거절 실패");
 		}
 	}
 

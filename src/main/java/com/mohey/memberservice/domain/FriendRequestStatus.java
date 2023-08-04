@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -30,11 +32,13 @@ import lombok.Setter;
 public class FriendRequestStatus {
 	@Id
 	private Long id;
+
 	@OneToOne(fetch = LAZY)
 	@MapsId
-	@JoinColumn(name = "friend_request_id")
+	@JoinColumn(name = "id")
 	private FriendRequest friendRequest;
 
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private AlarmStatusEnum status;
 

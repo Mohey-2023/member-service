@@ -25,11 +25,11 @@ public class MemberDeviceAliveStatus {
 	Long id;
 
 	@OneToOne(fetch = LAZY)
-	@JoinColumn(name = "member_device_id")
+	@JoinColumn(name = "member_device_tb_id")
 	MemberDevice memberDeviceId;
 
 	@Column(nullable = false)
-	private Boolean aliveStatus = true;
+	private Boolean aliveStatus ;
 
 	@CreatedDate
 	@Column(nullable = false)
