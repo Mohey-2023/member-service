@@ -4,7 +4,14 @@ import static javax.persistence.FetchType.*;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,7 +24,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name  ="member_device_noti_status_tb")
+@Table(name = "member_device_noti_status_tb")
 public class MemberDeviceNotiStatus {
 
 	@GeneratedValue
@@ -29,7 +36,7 @@ public class MemberDeviceNotiStatus {
 	MemberDevice memberDeviceId;
 
 	@Column(nullable = false)
-	private Boolean notiStatus ;
+	private Boolean notiStatus;
 
 	@CreatedDate
 	@Column(nullable = false)

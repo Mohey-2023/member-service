@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mohey.memberservice.dto.memberalarm.NotificationDto;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,4 +32,5 @@ public class KafkaProducer {
 		log.info("Kafka Producer send data from Member microservice : " + notificationDto);
 		return notificationDto;
 	}
+
 }
