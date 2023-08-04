@@ -2,25 +2,19 @@ package com.mohey.memberservice.controller;
 
 import javax.validation.Valid;
 
+import com.mohey.memberservice.dto.memberFriend.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mohey.memberservice.domain.FriendRequestStatus;
 import com.mohey.memberservice.dto.ResponseDto;
-import com.mohey.memberservice.dto.memberFriend.FriendDeleteReqDto;
-import com.mohey.memberservice.dto.memberFriend.FriendDeleteRespDto;
-import com.mohey.memberservice.dto.memberFriend.FriendRegisterReqDto;
-import com.mohey.memberservice.dto.memberFriend.FriendRegisterRespDto;
-import com.mohey.memberservice.dto.memberFriend.FriendStarReqDto;
-import com.mohey.memberservice.dto.memberFriend.FriendStarRespDto;
 import com.mohey.memberservice.service.FriendRequestResponseService;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/members/friendAct")

@@ -2,6 +2,7 @@ package com.mohey.memberservice.service;
 
 import java.util.Optional;
 
+import com.mohey.memberservice.dto.memberFriend.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,12 +12,6 @@ import com.mohey.memberservice.domain.FriendRelation;
 import com.mohey.memberservice.domain.FriendRequest;
 import com.mohey.memberservice.domain.FriendRequestStatus;
 import com.mohey.memberservice.domain.Member;
-import com.mohey.memberservice.dto.memberFriend.FriendDeleteReqDto;
-import com.mohey.memberservice.dto.memberFriend.FriendDeleteRespDto;
-import com.mohey.memberservice.dto.memberFriend.FriendRegisterReqDto;
-import com.mohey.memberservice.dto.memberFriend.FriendRegisterRespDto;
-import com.mohey.memberservice.dto.memberFriend.FriendStarReqDto;
-import com.mohey.memberservice.dto.memberFriend.FriendStarRespDto;
 import com.mohey.memberservice.ex.CustomApiException;
 import com.mohey.memberservice.repository.FriendRelationFavoriteStatusRepository;
 import com.mohey.memberservice.repository.FriendRelationRepository;
@@ -27,6 +22,10 @@ import com.mohey.memberservice.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class FriendRequestResponseServiceImpl implements FriendRequestResponseService {
@@ -35,8 +34,6 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 	private final FriendRelationStatusRepository friendRelationStatusRepository;
 	private final FriendRelationRepository friendRelationRepository;
 	private final FriendRelationFavoriteStatusRepository friendRelationFavoriteStatusRepository;
-	private final FriendRequestRepository friendRequestRepository;
-	private final FriendRequestStatusRepository friendRequestStatusRepository;
 
 	@Transactional
 	@Override
@@ -165,5 +162,6 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			throw new CustomApiException("친구거절 실패");
 		}
 	}
+
 
 }
