@@ -16,10 +16,14 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mohey.memberservice.domain.AlarmStatusEnum;
 import com.mohey.memberservice.domain.FriendRelation;
+import com.mohey.memberservice.domain.FriendRequest;
+import com.mohey.memberservice.domain.FriendRequestStatus;
 import com.mohey.memberservice.domain.Member;
 import com.mohey.memberservice.dto.memberFriend.FriendRegisterReqDto;
 import com.mohey.memberservice.dto.memberFriend.FriendStarReqDto;
+import com.mohey.memberservice.dto.memberalarm.FriendReqAlarmReqDto;
 import com.mohey.memberservice.dto.memberjoin.JoinReqDto;
 import com.mohey.memberservice.repository.FriendRelationRepository;
 import com.mohey.memberservice.repository.FriendRequestRepository;
@@ -88,21 +92,25 @@ class FriendRequestResponseControllerTest {
 				.build();
 		friendRelationRepository.save(friendRelation2);
 
-		//요청 정보 사항 저장
-		// FriendReqAlarmReqDto friendReqAlarmReqDto = new FriendReqAlarmReqDto();
-		// FriendRequest friendRequest =
-		// 	friendReqAlarmReqDto.toFriendRequestEntity(member, member2, null, alarmUuid);
-		// FriendRequestStatus friendRequestStatus = FriendRequestStatus.builder()
-		// 	.status(AlarmStatusEnum.valueOf("WAIT"))
-		// 	.build();
-		// friendRequestStatus.setFriendRequest(friendRequest); // FriendRequest와 연결
-		// friendRequest.setFriendRequestStatus(friendRequestStatus); // 양방향 연관관계 설정
-		// friendRequestRepository.save(friendRequest);
+		//친구 요청 정보 사항 저장 수락 거절시 status 변경임
+		FriendReqAlarmReqDto friendReqAlarmReqDto = new FriendReqAlarmReqDto();
+		FriendRequest friendRequest =
+			friendReqAlarmReqDto.toFriendRequestEntity(member, member2, null, alarmUuid);
+		FriendRequestStatus friendRequestStatus = FriendRequestStatus.builder()
+			.status(AlarmStatusEnum.valueOf("WAIT"))
+			.build();
+		friendRequestStatus.setFriendRequest(friendRequest); // FriendRequest와 연결
+		friendRequest.setFriendRequestStatus(friendRequestStatus); // 양방향 연관관계 설정
+		friendRequestRepository.save(friendRequest);
 
-		joinReqDto.setNickname("qqq");
-		joinReqDto.setProfile_url("aaaaa");
-		joinReqDto.setSelfIntroduction("hahahahahaha");
-		memberInfoRepository.save(joinReqDto.toMemberInfoEntity(member));
+		FriendRequest friendRequest2 =
+			friendReqAlarmReqDto.toFriendRequestEntity(member2, member3, null, "12345");
+		FriendRequestStatus friendRequestStatus2 = FriendRequestStatus.builder()
+			.status(AlarmStatusEnum.valueOf("WAIT"))
+			.build();
+		friendRequestStatus2.setFriendRequest(friendRequest2); // FriendRequest와 연결
+		friendRequest2.setFriendRequestStatus(friendRequestStatus2); // 양방향 연관관계 설정
+		friendRequestRepository.save(friendRequest2);
 
 	}
 
@@ -136,6 +144,7 @@ class FriendRequestResponseControllerTest {
 		FriendRegisterReqDto friendRegisterReqDto = new FriendRegisterReqDto();
 		friendRegisterReqDto.setMyUuid(friendUuid);
 		friendRegisterReqDto.setFriendUuid("1234");
+		friendRegisterReqDto.setAlarmUuid("12345");
 		String requestBody = om.writeValueAsString(friendRegisterReqDto);
 		System.out.println("테스트 : " + requestBody);
 
@@ -158,6 +167,7 @@ class FriendRequestResponseControllerTest {
 		FriendRegisterReqDto friendRegisterReqDto = new FriendRegisterReqDto();
 		friendRegisterReqDto.setMyUuid(memberUuid);
 		friendRegisterReqDto.setFriendUuid("1234");
+		friendRegisterReqDto.setAlarmUuid("12345");
 		String requestBody = om.writeValueAsString(friendRegisterReqDto);
 		System.out.println("테스트 : " + requestBody);
 
@@ -256,4 +266,39 @@ class FriendRequestResponseControllerTest {
 		resultActions.andExpect(status().isBadRequest());
 	}
 
+	@Transactional
+	@Test
+	public void friendReject_success_test() throws Exception {
+		// given
+		String requestBody = alarmUuid;
+		System.out.println("테스트 : " + requestBody);
+
+		// when
+		ResultActions resultActions = mvc
+			.perform(post("/members/friendAct/reject").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+		String responseBody =
+			resultActions.andReturn().getResponse().getContentAsString();
+		System.out.println("테스트 : " + responseBody);
+
+		// then
+		resultActions.andExpect(status().isOk());
+	}
+
+	@Transactional
+	@Test
+	public void friendReject_fail_test() throws Exception {
+		// given
+		String requestBody = "12332234";
+		System.out.println("테스트 : " + requestBody);
+
+		// when
+		ResultActions resultActions = mvc
+			.perform(post("/members/friendAct/reject").content(requestBody).contentType(MediaType.APPLICATION_JSON));
+		String responseBody =
+			resultActions.andReturn().getResponse().getContentAsString();
+		System.out.println("테스트 : " + responseBody);
+
+		// then
+		resultActions.andExpect(status().isBadRequest());
+	}
 }

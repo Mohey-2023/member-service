@@ -1,4 +1,4 @@
-package com.mohey.memberservice.dto.memberalram;
+package com.mohey.memberservice.dto.memberalarm;
 
 import com.mohey.memberservice.domain.FriendRequest;
 import com.mohey.memberservice.domain.FriendRequestStatus;
