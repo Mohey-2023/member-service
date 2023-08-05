@@ -22,7 +22,7 @@ public class FriendSearchController {
     private final FriendSearchService friendSearchService;
 
     //nickName 어케 걸지..
-    @GetMapping("/members/{memberUuId}")
+    @GetMapping("/{memberUuId}")
     //?search={nickName}
     public ResponseEntity<?> SearchFriendList(@PathVariable String memberUuId){
         List<FriendListSearchRespDto> friendListSearchRespDtos = friendSearchService.searchFriendList(memberUuId);

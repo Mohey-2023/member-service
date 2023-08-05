@@ -1,7 +1,11 @@
 package com.mohey.memberservice.dto.memberFriend;
 
 import com.mohey.memberservice.domain.GenderEnum;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class FriendListSearchRespDto {
 
     private String nickname;
