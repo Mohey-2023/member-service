@@ -34,6 +34,8 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 	private final FriendRelationStatusRepository friendRelationStatusRepository;
 	private final FriendRelationRepository friendRelationRepository;
 	private final FriendRelationFavoriteStatusRepository friendRelationFavoriteStatusRepository;
+	private final FriendRequestStatusRepository friendRequestStatusRepository;
+	private final FriendRequestRepository friendRequestRepository;
 
 	@Transactional
 	@Override
