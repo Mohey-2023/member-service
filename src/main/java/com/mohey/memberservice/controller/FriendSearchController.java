@@ -1,6 +1,7 @@
 package com.mohey.memberservice.controller;
 
 import com.mohey.memberservice.dto.ResponseDto;
+import com.mohey.memberservice.dto.memberFriend.FriendInFriendListSearchRespDto;
 import com.mohey.memberservice.dto.memberFriend.FriendListSearchRespDto;
 import com.mohey.memberservice.service.FriendSearchService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class FriendSearchController {
     private final FriendSearchService friendSearchService;
 
     //nickName 어케 걸지..
-    @GetMapping("/members/{memberUuId}")
+    @GetMapping("/{memberUuId}")
     //?search={nickName}
     public ResponseEntity<?> SearchFriendList(@PathVariable String memberUuId){
         List<FriendListSearchRespDto> friendListSearchRespDtos = friendSearchService.searchFriendList(memberUuId);
@@ -30,4 +31,14 @@ public class FriendSearchController {
         return new ResponseEntity<>(new ResponseDto<>(1,"친구 목록 조회",friendListSearchRespDtos), HttpStatus.OK);
 
     }
+
+    @GetMapping("/{memberUuId}/{friendNickname}")
+    public ResponseEntity<?> SearchFriendInFriendList(@PathVariable("memberUuId") String memberUuId, @PathVariable("friendNickname") String nickname){
+        List<FriendInFriendListSearchRespDto> friendInFriendListSearchRespDtos = friendSearchService.SearchFriendInFriendList(nickname, memberUuId);
+
+        return new ResponseEntity<>(new ResponseDto<>(1,"친구 검색",friendInFriendListSearchRespDtos), HttpStatus.OK);
+
+    }
+
+
 }
