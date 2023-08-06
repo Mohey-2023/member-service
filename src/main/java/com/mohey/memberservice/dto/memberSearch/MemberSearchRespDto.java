@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 public class MemberSearchRespDto {
 
+    private String memberUuid;
+
     private String nickname;
 
     private GenderEnum gender;
@@ -18,7 +20,8 @@ public class MemberSearchRespDto {
 
     private Boolean friendStatus;
 
-    public MemberSearchRespDto(String nickname, GenderEnum gender, String birthDate, String profileUrl, Boolean friendStatus) {
+    public MemberSearchRespDto(String memberUuid,String nickname, GenderEnum gender, String birthDate, String profileUrl, Boolean friendStatus) {
+        this.memberUuid = memberUuid,
         this.nickname = nickname;
         this.gender = gender;
         this.birthDate = birthDate;
@@ -29,7 +32,8 @@ public class MemberSearchRespDto {
     @Override
     public String toString() {
         return "MemberSearchRespDto{" +
-                "nickname='" + nickname + '\'' +
+                "memberUuid='" + memberUuid + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", gender=" + gender +
                 ", birthDate='" + birthDate + '\'' +
                 ", profileUrl='" + profileUrl + '\'' +
