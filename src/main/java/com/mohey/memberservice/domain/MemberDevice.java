@@ -4,7 +4,15 @@ import static javax.persistence.FetchType.*;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,7 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name  ="member_device_tb")
+@Table(name = "member_device_tb")
 public class MemberDevice {
 
 	@GeneratedValue
@@ -55,4 +63,13 @@ public class MemberDevice {
 		this.memberDeviceAliveStatus = memberDeviceAliveStatus;
 		this.memberDeviceNotiStatus = memberDeviceNotiStatus;
 	}
+
+	public void setMemberDeviceAliveStatus(MemberDeviceAliveStatus memberDeviceAliveStatus) {
+		this.memberDeviceAliveStatus = memberDeviceAliveStatus;
+	}
+
+	public void setMemberDeviceNotiStatus(MemberDeviceNotiStatus memberDeviceNotiStatus) {
+		this.memberDeviceNotiStatus = memberDeviceNotiStatus;
+	}
+
 }

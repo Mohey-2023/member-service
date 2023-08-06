@@ -82,6 +82,14 @@ class FriendRequestResponseControllerTest {
 				.friendStatus(true)
 				.build();
 		friendRelationRepository.save(friendRelation);
+		FriendRelation friendRelationReverse =
+				FriendRelation.builder()
+						.memberId(member3)
+						.friendId(member)
+						.favoriteStatus(false)
+						.friendStatus(true)
+						.build();
+		friendRelationRepository.save(friendRelationReverse);
 
 		FriendRelation friendRelation2 =
 			FriendRelation.builder()
@@ -91,6 +99,15 @@ class FriendRequestResponseControllerTest {
 				.friendStatus(false)
 				.build();
 		friendRelationRepository.save(friendRelation2);
+		FriendRelation friendRelation2Reverse =
+				FriendRelation.builder()
+						.memberId(member3)
+						.friendId(member2)
+						.favoriteStatus(false)
+						.friendStatus(false)
+						.build();
+		friendRelationRepository.save(friendRelation2Reverse);
+
 
 		//친구 요청 정보 사항 저장 수락 거절시 status 변경임
 		FriendReqAlarmReqDto friendReqAlarmReqDto = new FriendReqAlarmReqDto();

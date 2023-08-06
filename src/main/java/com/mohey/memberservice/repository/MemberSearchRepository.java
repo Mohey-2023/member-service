@@ -13,6 +13,7 @@ public interface MemberSearchRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT MI.memberId FROM MemberInfo MI WHERE MI.nickname = :nickname")
     List<Member> findAllByNickname(@Param("nickname") String nickname);
+  
     @Query("SELECT new com.mohey.memberservice.dto.memberSearch.MemberSearchRespDto("+
             "MI.nickname," +
             "M.gender, "+
@@ -26,7 +27,6 @@ public interface MemberSearchRepository extends JpaRepository<Member, Long> {
             "WHERE M.id = :id"
     )
     List<MemberSearchRespDto> getMemberList(@Param("id") Long id, @Param("friendId") Member friendId);
-
 
 
 }
