@@ -9,3 +9,4 @@ public interface MemberSearchService {
     List<MemberSearchRespDto> Search(String nickname, String memberUuId);
 
 }
+

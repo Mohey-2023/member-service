@@ -52,6 +52,6 @@ public class MemberSearchServiceImpl implements MemberSearchService{
         }
         return memberList;
     }
+}
 
-    }
 

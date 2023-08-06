@@ -2,11 +2,9 @@ package com.mohey.memberservice.dto.memberFriend;
 
 import com.mohey.memberservice.domain.GenderEnum;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-public class FriendListSearchRespDto {
+public class FriendInFriendListSearchRespDto {
 
     private String memberUuid;
 
@@ -20,7 +18,7 @@ public class FriendListSearchRespDto {
 
     private Boolean favoriteStatus;
 
-    public FriendListSearchRespDto(String memberUuid, String nickname, GenderEnum gender, String birthDate, String profileUrl, Boolean favoriteStatus) {
+    public FriendInFriendListSearchRespDto(String memberUuid, String nickname, GenderEnum gender, String birthDate, String profileUrl, Boolean favoriteStatus) {
         this.memberUuid = memberUuid;
         this.nickname = nickname;
         this.gender = gender;
@@ -31,7 +29,7 @@ public class FriendListSearchRespDto {
 
     @Override
     public String toString() {
-        return "FriendListSearchRespDto{" +
+        return "FriendInFriendListSearchRespDto{" +
                 "memberUuid='" + memberUuid + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", gender=" + gender +
