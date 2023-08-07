@@ -21,7 +21,7 @@ public class MemberSearchRespDto {
     private Boolean friendStatus;
 
     public MemberSearchRespDto(String memberUuid,String nickname, GenderEnum gender, String birthDate, String profileUrl, Boolean friendStatus) {
-        this.memberUuid = memberUuid,
+        this.memberUuid = memberUuid;
         this.nickname = nickname;
         this.gender = gender;
         this.birthDate = birthDate;
