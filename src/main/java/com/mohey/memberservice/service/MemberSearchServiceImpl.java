@@ -37,7 +37,7 @@ public class MemberSearchServiceImpl implements MemberSearchService{
             //System.out.println("mmList1");
 
             for (int i = 0; i < memberIdList.size() - 1; i++) {
-                memberList.addAll(memberSearchRepository.findtMemberList(memberIdList.get(i).getId(),me));
+                memberList.addAll(memberSearchRepository.findMemberList(memberIdList.get(i).getId(),me));
                 //System.out.println("mmList2");
             }
             //System.out.println(memberList.toString());
