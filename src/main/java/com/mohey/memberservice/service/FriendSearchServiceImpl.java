@@ -37,7 +37,7 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 //            }
 
             //1. 그냥 친구 불러오기
-            List<FriendListSearchRespDto> friendList = friendSearchRepository.findNotFavoriteFriendList(my.getId());
+            friendList = friendSearchRepository.findNotFavoriteFriendList(my.getId());
             //2. 친한 친구 불러오기
             for (int i = 1; i < friendIdList.size() ; i++) {
                 friendList.addAll(friendSearchRepository.findNotFavoriteFriendList(friendIdList.get(i).getId()));
@@ -56,7 +56,7 @@ public class FriendSearchServiceImpl implements FriendSearchService {
             throw new CustomApiException("목록에 표시할 친구가 없습니다.");
         }
 
-        } catch(Exception e) {
+        catch(Exception e) {
             throw new CustomApiException("친구목록 가져오기 실패");
         }
         return friendList;
