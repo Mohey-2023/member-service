@@ -1,0 +1,1 @@
+package com.mohey.memberservice.dto.memberalarm;import lombok.AllArgsConstructor;import lombok.Getter;import lombok.Setter;@AllArgsConstructor@Setter@Getterpublic class NotiTokenDto {	private String deviceToken;	private Boolean notiStatus;	private Boolean aliveStatus;}

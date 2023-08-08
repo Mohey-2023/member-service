@@ -25,4 +25,5 @@ public interface MemberInfoRepository extends JpaRepository<MemberInfo, Long> {
 	GetInfoRespDto getUserInfo(@Param("id") Long id);
 
 	MemberInfo findMemberInfoByMemberId(Member member);
+
 }
