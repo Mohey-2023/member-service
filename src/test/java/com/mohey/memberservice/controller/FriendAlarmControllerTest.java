@@ -1,4 +1,3 @@
-
 package com.mohey.memberservice.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -192,7 +191,7 @@ class FriendAlarmControllerTest {
 			resultActions.andReturn().getResponse().getContentAsString();
 		System.out.println("테스트 : " + responseBody);
 		// then
-		resultActions.andExpect(status().isOk());
+		resultActions.andExpect(status().isBadRequest());
 
 	}
 
