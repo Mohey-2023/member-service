@@ -56,10 +56,10 @@ public interface FriendSearchRepository extends JpaRepository<FriendRelation, Lo
 	)
 	List<FriendListSearchRespDto> findFavoriteFriendList(@Param("id") Long id);
 
+
 	@Query("SELECT MI.memberId FROM MemberInfo MI " +
-		"INNER JOIN FriendRelation FR ON FR.memberId = :memberId AND FR.friendId = MI.memberId AND FR.friendStatus = true "
-		+
-		"WHERE MI.nickname = :nickname")
+			"INNER JOIN FriendRelation FR ON FR.memberId = :memberId AND FR.friendId = MI.memberId AND FR.friendStatus = true " +
+			"WHERE MI.nickname LIKE :nickname")
 	List<Member> findAllByNickname(@Param("nickname") String nickname, @Param("memberId") Member memberId);
 
 	@Query("SELECT new com.mohey.memberservice.dto.memberFriend.FriendInFriendListSearchRespDto(" +

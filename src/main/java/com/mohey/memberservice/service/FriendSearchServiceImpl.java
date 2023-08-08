@@ -70,7 +70,7 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 			Member me = memberRepository.findByMemberUuid(memberUuId);
 
 			//검색한 닉네임인 친구 모두 찾기
-			List<Member> memberList = friendSearchRepository.findAllByNickname(nickname, me);
+			List<Member> memberList = friendSearchRepository.findAllByNickname(nickname + "%", me);
 			System.out.println("get memberList");
 			System.out.println(memberList.size());
 
