@@ -1,0 +1,1 @@
+package com.mohey.memberservice.dto.memberInfo;import com.mohey.memberservice.domain.GenderEnum;import lombok.AllArgsConstructor;import lombok.Getter;@AllArgsConstructor@Getterpublic class GetProfileAndStatusRespDto {	String memberName;	GenderEnum memberGender;	String birthDate;	String profilePicture;}
