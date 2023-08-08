@@ -51,7 +51,7 @@ public interface FriendSearchRepository extends JpaRepository<FriendRelation, Lo
 		+
 		"LEFT JOIN MemberProfileImage MPI ON MPI.memberId = M AND MPI.createdDatetime = (SELECT MAX(mpi.createdDatetime) FROM MemberProfileImage mpi WHERE mpi.memberId = M)"
 		+
-		"LEFT JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = true " +
+		"INNER JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = true " +
 		"WHERE M.id = :id"
 	)
 	List<FriendListSearchRespDto> findFavoriteFriendList(@Param("id") Long id);
