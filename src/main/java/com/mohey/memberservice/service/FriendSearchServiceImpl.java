@@ -40,7 +40,7 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 			//            }
 
 			//1. 그냥 친구 불러오기
-			friendList = friendSearchRepository.findNotFavoriteFriendList(my.getId());
+			friendList = friendSearchRepository.findNotFavoriteFriendList(friendIdList.get(0).getId());
 			//2. 친한 친구 불러오기
 			for (int i = 1; i < friendIdList.size(); i++) {
 				friendList.addAll(friendSearchRepository.findNotFavoriteFriendList(friendIdList.get(i).getId()));
