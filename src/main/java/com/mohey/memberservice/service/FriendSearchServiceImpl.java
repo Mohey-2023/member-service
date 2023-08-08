@@ -38,6 +38,7 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 			//                throw new CustomApiException("목록에 표시할 친구가 없습니다.");
 			//            }
 
+
 			//친한 친구 불러오기 << 여기서 favorite_status = null이 추가된다 왜지?? 계속 나에 대한 정보를 불러왔어서 그런듯
 			friendList = friendSearchRepository.findFavoriteFriendList(friendIdList.get(0).getId());
 
