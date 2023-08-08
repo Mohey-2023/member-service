@@ -6,5 +6,4 @@ import com.mohey.memberservice.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 	Member findByMemberUuid(String memberUuid);
-
 }

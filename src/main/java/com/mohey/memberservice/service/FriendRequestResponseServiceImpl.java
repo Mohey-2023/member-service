@@ -2,6 +2,7 @@ package com.mohey.memberservice.service;
 
 import java.util.Optional;
 
+import com.mohey.memberservice.dto.memberFriend.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,12 +12,6 @@ import com.mohey.memberservice.domain.FriendRelation;
 import com.mohey.memberservice.domain.FriendRequest;
 import com.mohey.memberservice.domain.FriendRequestStatus;
 import com.mohey.memberservice.domain.Member;
-import com.mohey.memberservice.dto.memberFriend.FriendDeleteReqDto;
-import com.mohey.memberservice.dto.memberFriend.FriendDeleteRespDto;
-import com.mohey.memberservice.dto.memberFriend.FriendRegisterReqDto;
-import com.mohey.memberservice.dto.memberFriend.FriendRegisterRespDto;
-import com.mohey.memberservice.dto.memberFriend.FriendStarReqDto;
-import com.mohey.memberservice.dto.memberFriend.FriendStarRespDto;
 import com.mohey.memberservice.ex.CustomApiException;
 import com.mohey.memberservice.repository.FriendRelationFavoriteStatusRepository;
 import com.mohey.memberservice.repository.FriendRelationRepository;
@@ -27,6 +22,10 @@ import com.mohey.memberservice.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class FriendRequestResponseServiceImpl implements FriendRequestResponseService {
@@ -35,8 +34,8 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 	private final FriendRelationStatusRepository friendRelationStatusRepository;
 	private final FriendRelationRepository friendRelationRepository;
 	private final FriendRelationFavoriteStatusRepository friendRelationFavoriteStatusRepository;
-	private final FriendRequestRepository friendRequestRepository;
 	private final FriendRequestStatusRepository friendRequestStatusRepository;
+	private final FriendRequestRepository friendRequestRepository;
 
 	@Transactional
 	@Override
@@ -49,30 +48,38 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 				throw new CustomApiException("사용자가 없습니다.");
 			}
 			boolean alreadyFriend = friendRelationRepository.existsByMemberIdAndFriendId(my, friend);
+			boolean alreadyFriend2 = friendRelationRepository.existsByMemberIdAndFriendId(friend, my);
 			//이미 친구가 있을떄는 에러 또는 상태변경
-			if (alreadyFriend) {
+			if (alreadyFriend || alreadyFriend2) {
 				FriendRelation friendRelation = friendRelationRepository.findByMemberIdAndFriendId(my, friend);
-				if (friendRelation.getFriendStatus()) {
+				FriendRelation friendRelation2 = friendRelationRepository.findByMemberIdAndFriendId(friend, my);
+				if (friendRelation.getFriendStatus() || friendRelation2.getFriendStatus()) {
 					throw new CustomApiException("이미 친구입니다");
 				} else {
 					friendRelation.changeFriendStatus(!friendRelation.getFriendStatus());
+					friendRelation2.changeFavoriteStatus(!friendRelation2.getFavoriteStatus());
 					friendRelationStatusRepository.save(
-						friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
+							friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
+					friendRelationStatusRepository.save(
+							friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation2));
 					return new FriendRegisterRespDto(friendRelation);
 				}
 			}
 
 			FriendRelation friendRelation = friendRelationRepository.save(
-				friendRegisterReqDto.toFriendRelationEntity(my, friend));
+					friendRegisterReqDto.toFriendRelationEntity(my, friend));
 			friendRelationStatusRepository.save(friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
+			FriendRelation friendRelation2 = friendRelationRepository.save(
+					friendRegisterReqDto.toFriendRelationEntity(friend, my));
+			friendRelationStatusRepository.save(friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation2));
 			//친구 신청의 상태 승인으로 바꿔주기
 
 			FriendRequest friendRequest = friendRequestRepository.findFriendRequestByAlarmUuid(
-				friendRegisterReqDto.getAlarmUuid());
-			System.out.println("저저ㅓ보옹" + friendRequest.getAlarmUuid());
+					friendRegisterReqDto.getAlarmUuid());
+
 
 			Optional<FriendRequestStatus> friendRequestStatus = friendRequestStatusRepository.findById(
-				friendRequest.getId());
+					friendRequest.getId());
 			if (friendRequestStatus.isPresent()) {
 				friendRequestStatus.get().changeStatus(AlarmStatusEnum.valueOf("YES"));
 
@@ -109,7 +116,7 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 
 			//로그 남기기
 			friendRelationFavoriteStatusRepository.save(
-				friendStarReqDto.toFriendRelationFavoriteStatusEntity(friendRelation));
+					friendStarReqDto.toFriendRelationFavoriteStatusEntity(friendRelation));
 
 			return new FriendStarRespDto(friendRelation);
 		} catch (DataIntegrityViolationException e) {
@@ -155,7 +162,7 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 				throw new CustomApiException("신청 정보가 없어요");
 			}
 			FriendRequestStatus friendRequestStatus = friendRequestStatusRepository.findFriendRequestStatusById(
-				friendRequest.getId());
+					friendRequest.getId());
 			if (friendRequestStatus == null) {
 				throw new CustomApiException("신청 정보가 없어요");
 			}
@@ -165,5 +172,6 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			throw new CustomApiException("친구거절 실패");
 		}
 	}
+
 
 }
