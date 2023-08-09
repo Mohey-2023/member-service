@@ -2,7 +2,6 @@ package com.mohey.memberservice.service;
 
 import java.util.Optional;
 
-import com.mohey.memberservice.dto.memberFriend.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +11,13 @@ import com.mohey.memberservice.domain.FriendRelation;
 import com.mohey.memberservice.domain.FriendRequest;
 import com.mohey.memberservice.domain.FriendRequestStatus;
 import com.mohey.memberservice.domain.Member;
+import com.mohey.memberservice.dto.memberFriend.FriendDeleteReqDto;
+import com.mohey.memberservice.dto.memberFriend.FriendDeleteRespDto;
+import com.mohey.memberservice.dto.memberFriend.FriendRegisterReqDto;
+import com.mohey.memberservice.dto.memberFriend.FriendRegisterRespDto;
+import com.mohey.memberservice.dto.memberFriend.FriendStarReqDto;
+import com.mohey.memberservice.dto.memberFriend.FriendStarRespDto;
+import com.mohey.memberservice.dto.memberalarm.AlarmRequest;
 import com.mohey.memberservice.ex.CustomApiException;
 import com.mohey.memberservice.repository.FriendRelationFavoriteStatusRepository;
 import com.mohey.memberservice.repository.FriendRelationRepository;
@@ -21,10 +27,6 @@ import com.mohey.memberservice.repository.FriendRequestStatusRepository;
 import com.mohey.memberservice.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
-
-import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -59,27 +61,26 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 					friendRelation.changeFriendStatus(!friendRelation.getFriendStatus());
 					friendRelation2.changeFavoriteStatus(!friendRelation2.getFavoriteStatus());
 					friendRelationStatusRepository.save(
-							friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
+						friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
 					friendRelationStatusRepository.save(
-							friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation2));
+						friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation2));
 					return new FriendRegisterRespDto(friendRelation);
 				}
 			}
 
 			FriendRelation friendRelation = friendRelationRepository.save(
-					friendRegisterReqDto.toFriendRelationEntity(my, friend));
+				friendRegisterReqDto.toFriendRelationEntity(my, friend));
 			friendRelationStatusRepository.save(friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
 			FriendRelation friendRelation2 = friendRelationRepository.save(
-					friendRegisterReqDto.toFriendRelationEntity(friend, my));
+				friendRegisterReqDto.toFriendRelationEntity(friend, my));
 			friendRelationStatusRepository.save(friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation2));
 			//친구 신청의 상태 승인으로 바꿔주기
 
 			FriendRequest friendRequest = friendRequestRepository.findFriendRequestByAlarmUuid(
-					friendRegisterReqDto.getAlarmUuid());
-
+				friendRegisterReqDto.getAlarmUuid());
 
 			Optional<FriendRequestStatus> friendRequestStatus = friendRequestStatusRepository.findById(
-					friendRequest.getId());
+				friendRequest.getId());
 			if (friendRequestStatus.isPresent()) {
 				friendRequestStatus.get().changeStatus(AlarmStatusEnum.valueOf("YES"));
 
@@ -116,7 +117,7 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 
 			//로그 남기기
 			friendRelationFavoriteStatusRepository.save(
-					friendStarReqDto.toFriendRelationFavoriteStatusEntity(friendRelation));
+				friendStarReqDto.toFriendRelationFavoriteStatusEntity(friendRelation));
 
 			return new FriendStarRespDto(friendRelation);
 		} catch (DataIntegrityViolationException e) {
@@ -152,26 +153,28 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 		}
 	}
 
+	@Transactional
 	@Override
-	public FriendRequestStatus reject(String alarmUuid) {
+	public Boolean reject(AlarmRequest alarmUuid) {
 		//알람 유유아이디로freindRequest객체 받아오고 그 pk로
 		//친구신청 상태 테이블 가져와서 그냥 그 상태값을 NO로 바꾸면 끝. 그리고 반환
+		System.out.println("qqqqqq" + alarmUuid.getAlarmUuid());
 		try {
-			FriendRequest friendRequest = friendRequestRepository.findFriendRequestByAlarmUuid(alarmUuid);
+			FriendRequest friendRequest = friendRequestRepository.findFriendRequestByAlarmUuid(
+				alarmUuid.getAlarmUuid());
 			if (friendRequest == null) {
 				throw new CustomApiException("신청 정보가 없어요");
 			}
 			FriendRequestStatus friendRequestStatus = friendRequestStatusRepository.findFriendRequestStatusById(
-					friendRequest.getId());
+				friendRequest.getId());
 			if (friendRequestStatus == null) {
 				throw new CustomApiException("신청 정보가 없어요");
 			}
 			friendRequestStatus.changeStatus(AlarmStatusEnum.valueOf("NO"));
-			return friendRequestStatus;
+			return true;
 		} catch (DataIntegrityViolationException e) {
 			throw new CustomApiException("친구거절 실패");
 		}
 	}
-
 
 }

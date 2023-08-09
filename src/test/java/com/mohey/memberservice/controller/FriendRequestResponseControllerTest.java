@@ -23,6 +23,7 @@ import com.mohey.memberservice.domain.FriendRequestStatus;
 import com.mohey.memberservice.domain.Member;
 import com.mohey.memberservice.dto.memberFriend.FriendRegisterReqDto;
 import com.mohey.memberservice.dto.memberFriend.FriendStarReqDto;
+import com.mohey.memberservice.dto.memberalarm.AlarmRequest;
 import com.mohey.memberservice.dto.memberalarm.FriendReqAlarmReqDto;
 import com.mohey.memberservice.dto.memberjoin.JoinReqDto;
 import com.mohey.memberservice.repository.FriendRelationRepository;
@@ -83,12 +84,12 @@ class FriendRequestResponseControllerTest {
 				.build();
 		friendRelationRepository.save(friendRelation);
 		FriendRelation friendRelationReverse =
-				FriendRelation.builder()
-						.memberId(member3)
-						.friendId(member)
-						.favoriteStatus(false)
-						.friendStatus(true)
-						.build();
+			FriendRelation.builder()
+				.memberId(member3)
+				.friendId(member)
+				.favoriteStatus(false)
+				.friendStatus(true)
+				.build();
 		friendRelationRepository.save(friendRelationReverse);
 
 		FriendRelation friendRelation2 =
@@ -100,14 +101,13 @@ class FriendRequestResponseControllerTest {
 				.build();
 		friendRelationRepository.save(friendRelation2);
 		FriendRelation friendRelation2Reverse =
-				FriendRelation.builder()
-						.memberId(member3)
-						.friendId(member2)
-						.favoriteStatus(false)
-						.friendStatus(false)
-						.build();
+			FriendRelation.builder()
+				.memberId(member3)
+				.friendId(member2)
+				.favoriteStatus(false)
+				.friendStatus(false)
+				.build();
 		friendRelationRepository.save(friendRelation2Reverse);
-
 
 		//친구 요청 정보 사항 저장 수락 거절시 status 변경임
 		FriendReqAlarmReqDto friendReqAlarmReqDto = new FriendReqAlarmReqDto();
@@ -287,7 +287,9 @@ class FriendRequestResponseControllerTest {
 	@Test
 	public void friendReject_success_test() throws Exception {
 		// given
-		String requestBody = alarmUuid;
+		AlarmRequest alarmRequest = new AlarmRequest(alarmUuid);
+
+		String requestBody = om.writeValueAsString(alarmRequest);
 		System.out.println("테스트 : " + requestBody);
 
 		// when

@@ -15,13 +15,12 @@ import com.mohey.memberservice.domain.FriendRequestStatus;
 import com.mohey.memberservice.domain.Member;
 import com.mohey.memberservice.domain.MemberDevice;
 import com.mohey.memberservice.domain.MemberDeviceNotiStatus;
-import com.mohey.memberservice.domain.MemberInfo;
 import com.mohey.memberservice.dto.memberalarm.FriendReqAlarmReqDto;
 import com.mohey.memberservice.dto.memberalarm.FriendReqAlarmRespDto;
 import com.mohey.memberservice.dto.memberalarm.FriendRespAlarmRespDto;
-import com.mohey.memberservice.dto.memberalarm.NotificationDto;
 import com.mohey.memberservice.ex.CustomApiException;
 import com.mohey.memberservice.kafka.KafkaProducer;
+import com.mohey.memberservice.repository.FriendRelationRepository;
 import com.mohey.memberservice.repository.FriendRequestRepository;
 import com.mohey.memberservice.repository.MemberDeviceNotiStatusRepository;
 import com.mohey.memberservice.repository.MemberDeviceRepository;
@@ -39,16 +38,22 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 	private final MemberDeviceNotiStatusRepository memberDeviceNotiStatusRepository;
 	private final FriendRequestRepository friendRequestRepository;
 	private final KafkaProducer kafkaProducer;
+	private final FriendRelationRepository friendRelationRepository;
 
 	@Transactional
 	@Override
 	public FriendReqAlarmRespDto sendAlarm(FriendReqAlarmReqDto friendReqAlarmReqDto, String uuid) {
 		try {
+
 			Member my = memberRepository.findByMemberUuid(friendReqAlarmReqDto.getMyUuid());
 			Member friend = memberRepository.findByMemberUuid(friendReqAlarmReqDto.getFriendUuid());
 			if (my == null || friend == null) {
 				throw new CustomApiException("사용자가 없습니다.");
 			}
+			if (!friendRelationRepository.existsByMemberIdAndFriendId(my, friend)) {
+				throw new CustomApiException("이미 친구입니다.");
+			}
+			;
 			FriendRequest friendRequest =
 				friendReqAlarmReqDto.toFriendRequestEntity(my, friend, null, uuid);
 
@@ -62,21 +67,21 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 			friendRequestRepository.save(friendRequest); // 한 번만 저장하여 FriendRequestStatus 함께 저장
 
 			//알람 보내기
-			MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
-			MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
-			List<String> deviceTokenList = new ArrayList<>();
-			deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
-
-			NotificationDto notificationDto = NotificationDto.builder()
-				.topic("friend-request")
-				.type("friend")
-				.senderUuid(my.getMemberUuid())
-				.senderName(myinfo.getNickname())
-				.receiverName(youinfo.getNickname())
-				.receiverUuid(friend.getMemberUuid())
-				.deviceTokenList(deviceTokenList)
-				.build();
-			kafkaProducer.send("friend-request", notificationDto);
+			// MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
+			// MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
+			// List<String> deviceTokenList = new ArrayList<>();
+			// deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
+			//
+			// NotificationDto notificationDto = NotificationDto.builder()
+			// 	.topic("friend-request")
+			// 	.type("friend")
+			// 	.senderUuid(my.getMemberUuid())
+			// 	.senderName(myinfo.getNickname())
+			// 	.receiverName(youinfo.getNickname())
+			// 	.receiverUuid(friend.getMemberUuid())
+			// 	.deviceTokenList(deviceTokenList)
+			// 	.build();
+			// kafkaProducer.send("friend-request", notificationDto);
 
 			return new FriendReqAlarmRespDto(friendRequest);
 
@@ -122,7 +127,7 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 			}
 			return friendRespAlarmRespDtoList;
 		} catch (DataIntegrityViolationException e) {
-	   	throw new CustomApiException("친구리스트 실패");
+			throw new CustomApiException("친구리스트 실패");
 		}
 	}
 }

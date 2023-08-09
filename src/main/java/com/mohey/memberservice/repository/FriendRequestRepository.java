@@ -25,7 +25,7 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
 		+
 		"LEFT JOIN MemberInfo MI ON MI.memberId = M AND MI.createdDatetime = (SELECT MAX(mi.createdDatetime) FROM MemberInfo mi WHERE mi.memberId = M.id) "
 		+
-		"LEFT JOIN FriendRequestStatus FRS ON FRS.friendRequest.id = FR.id AND FRS.status = 'WAIT' " + // 여기를 수정
+		"INNER JOIN FriendRequestStatus FRS ON FRS.friendRequest.id = FR.id AND FRS.status = 'WAIT' " +
 		"WHERE FR.responseId.id = :id")
 	List<FriendRespAlarmRespDto> getFriendReqList(@Param("id") Long id);
 
