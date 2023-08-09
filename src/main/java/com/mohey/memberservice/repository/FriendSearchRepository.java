@@ -31,10 +31,10 @@ public interface FriendSearchRepository extends JpaRepository<FriendRelation, Lo
 		+
 		"LEFT JOIN MemberProfileImage MPI ON MPI.memberId = M AND MPI.createdDatetime = (SELECT MAX(mpi.createdDatetime) FROM MemberProfileImage mpi WHERE mpi.memberId = M)"
 		+
-		"LEFT JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = false " +
+		"LEFT JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = false AND FR.friendId = :friendId " +
 		"WHERE M.id = :id"
 	)
-	List<FriendListSearchRespDto> findNotFavoriteFriendList(@Param("id") Long id);
+	List<FriendListSearchRespDto> findNotFavoriteFriendList(@Param("id") Long id,@Param("friendId") Member friendId);
 
 	//내..정보만 가져옴 심지어 두 개임 디채ㅔ 왜?
 	//내 멤버아이디로 가져오라고 했으니까 그러지....
@@ -51,10 +51,10 @@ public interface FriendSearchRepository extends JpaRepository<FriendRelation, Lo
 		+
 		"LEFT JOIN MemberProfileImage MPI ON MPI.memberId = M AND MPI.createdDatetime = (SELECT MAX(mpi.createdDatetime) FROM MemberProfileImage mpi WHERE mpi.memberId = M)"
 		+
-		"INNER JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = true " +
+		"INNER JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = true AND FR.friendId = :friendId " +
 		"WHERE M.id = :id"
 	)
-	List<FriendListSearchRespDto> findFavoriteFriendList(@Param("id") Long id);
+	List<FriendListSearchRespDto> findFavoriteFriendList(@Param("id") Long id,@Param("friendId") Member friendId);
 
 
 	@Query("SELECT MI.memberId FROM MemberInfo MI " +

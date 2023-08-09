@@ -33,6 +33,7 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 			List<Member> friendIdList = friendSearchRepository.findAllByMemberId(my.getId());
 			 //System.out.println("getFriendIdList");
 			//System.out.println(friendIdList.toString());
+			//System.out.println(friendIdList.size());
 
 			//            if (friendIdList.isEmpty()) {
 			//                throw new CustomApiException("목록에 표시할 친구가 없습니다.");
@@ -40,18 +41,19 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 
 
 			//친한 친구 불러오기 << 여기서 favorite_status = null이 추가된다 왜지?? 계속 나에 대한 정보를 불러왔어서 그런듯
-			friendList = friendSearchRepository.findFavoriteFriendList(friendIdList.get(0).getId());
+			friendList = friendSearchRepository.findFavoriteFriendList(friendIdList.get(0).getId(),my);
 
 			for (int i = 1; i < friendIdList.size(); i++) {
-				friendList.addAll(friendSearchRepository.findFavoriteFriendList(friendIdList.get(i).getId()));
+				friendList.addAll(friendSearchRepository.findFavoriteFriendList(friendIdList.get(i).getId(),my));
 			}
-			//System.out.println(friendList.toString());
+			//System.out.println(friendList.size());
 
 			//그냥 친구 불러오기
 			for (int i = 0; i < friendIdList.size(); i++) {
-				friendList.addAll(friendSearchRepository.findNotFavoriteFriendList(friendIdList.get(i).getId()));
+				friendList.addAll(friendSearchRepository.findNotFavoriteFriendList(friendIdList.get(i).getId(),my));
+				//System.out.println("i: "+ i);
 			}
-
+			//System.out.println(friendList.size());
 			//notFavoriteFriendList.addAll(favoriteFriendList) 이거는 리스트를 반환해주는 게아님 !! 함수
 
 		} catch (IndexOutOfBoundsException e) {
