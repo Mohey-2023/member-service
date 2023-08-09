@@ -11,8 +11,8 @@ import com.mohey.memberservice.dto.memberSearch.MemberSearchRespDto;
 
 public interface MemberSearchRepository extends JpaRepository<Member, Long> {
 
-	@Query("SELECT MI.memberId FROM MemberInfo MI WHERE MI.nickname LIKE :nickname")
-	List<Member> findAllByNickname(@Param("nickname") String nickname);
+	@Query("SELECT MI.memberId FROM MemberInfo MI WHERE MI.nickname LIKE :nickname AND MI.memberId != :memberId")
+	List<Member> findAllByNickname(@Param("nickname") String nickname, @Param("memberId") Member memberId);
 
 	@Query("SELECT new com.mohey.memberservice.dto.memberSearch.MemberSearchRespDto(" +
 		"M.memberUuid, " +

@@ -30,18 +30,18 @@ public class MemberSearchServiceImpl implements MemberSearchService {
 
 			//닉네임으로 멤버들 찾아오기
 			Member me = memberRepository.findByMemberUuid(memberUuId);
-			//System.out.println(nickname);
-			List<Member> memberIdList = memberSearchRepository.findAllByNickname(nickname + "%");
-			//System.out.println("getMy");
-			//System.out.println(my);
+			System.out.println(nickname);
+			List<Member> memberIdList = memberSearchRepository.findAllByNickname(nickname + "%", me);
+			System.out.println("getMy");
+			System.out.println(me);
 
 			//1. 찾은 멤버들로 필요한 정보 불러오기
 			memberList = memberSearchRepository.findMemberList(memberIdList.get(0).getId(), me);
-			//System.out.println("mmList1");
+			System.out.println("mmList1");
 
-			for (int i = 0; i < memberIdList.size() - 1; i++) {
+			for (int i = 1; i < memberIdList.size(); i++) {
 				memberList.addAll(memberSearchRepository.findMemberList(memberIdList.get(i).getId(), me));
-				//System.out.println("mmList2");
+				System.out.println("mmList2");
 			}
 			//System.out.println(memberList.toString());
 			//친구가 아닌 사용자면 FriendStatus가 null로 떠버린다...이거 괜찮은가?
