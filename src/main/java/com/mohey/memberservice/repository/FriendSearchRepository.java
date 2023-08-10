@@ -16,7 +16,8 @@ public interface FriendSearchRepository extends JpaRepository<FriendRelation, Lo
 	//FriendRelation에 friendId와 memberId는 둘다 member 타입이다 !!!!!!!제발주의해
 	//내가 친구요청을 보낸 사용자면 친구를 가져오는데 친구요청을 받은 사용자면 가져오지 못한다
 
-	@Query("SELECT FR.friendId FROM FriendRelation FR WHERE FR.memberId.id = :memberId")
+	//친구상태 false 추가
+	@Query("SELECT FR.friendId FROM FriendRelation FR WHERE FR.memberId.id = :memberId AND FR.friendStatus != false ")
 	List<Member> findAllByMemberId(@Param("memberId") Long memberId);
 
 	@Query("SELECT new com.mohey.memberservice.dto.memberFriend.FriendListSearchRespDto(" +

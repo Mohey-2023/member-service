@@ -8,5 +8,8 @@ public interface MemberSearchService {
 
     List<MemberSearchRespDto> Search(String nickname, String memberUuId);
 
+    List<MemberSearchRespDto> yourFriendSearchByNickname(String nickname, String memberUuId, String friendUuId);
+
+    List<MemberSearchRespDto> yourFriendSearch(String memberUuId, String friendUuId);
 }
 
