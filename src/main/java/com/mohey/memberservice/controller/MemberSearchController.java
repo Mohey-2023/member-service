@@ -28,5 +28,22 @@ public class MemberSearchController {
 
     }
 
+    @GetMapping("/members/{memberUuId}/{friendUuId}/search/{friendNickname}")
+    public ResponseEntity<?> SearchYourFriendNickname(@PathVariable("friendNickname") String nickname, @PathVariable("memberUuId") String memberUuId,@PathVariable("friendUuId") String friendUuId){
+
+        List<MemberSearchRespDto> memberSearchRespDtos = memberSearchService.yourFriendSearchByNickname(nickname, memberUuId, friendUuId);
+
+        return new ResponseEntity<>(new ResponseDto<>(1,"사용자 찾기 성공", memberSearchRespDtos), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/members/{memberUuId}/{friendUuId}/search")
+    public ResponseEntity<?> SearchYourFriend( @PathVariable("memberUuId") String memberUuId,@PathVariable("friendUuId") String friendUuId){
+
+        List<MemberSearchRespDto> memberSearchRespDtos = memberSearchService.yourFriendSearch(memberUuId, friendUuId);
+
+        return new ResponseEntity<>(new ResponseDto<>(1,"사용자 찾기 성공", memberSearchRespDtos), HttpStatus.OK);
+
+    }
 
 }

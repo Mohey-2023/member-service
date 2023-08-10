@@ -33,5 +33,12 @@ public interface MemberSearchRepository extends JpaRepository<Member, Long> {
 		"WHERE M.id = :id"
 	)
 	List<MemberSearchRespDto> findMemberList(@Param("id") Long id, @Param("friendId") Member friendId, @Param("memberId") Member memberId);
+;
+	@Query("SELECT FR.friendId FROM FriendRelation FR INNER JOIN MemberInfo MI ON FR.friendId = MI.memberId WHERE FR.memberId.memberUuid = :memberUuid AND FR.friendStatus != false AND MI.nickname LIKE :nickname")
+	List<Member> findAllByMemberUuidNickname(@Param("memberUuid") String memberUuid, @Param("nickname") String nickname);
+
+	@Query("SELECT FR.friendId FROM FriendRelation FR INNER JOIN MemberInfo MI ON FR.friendId = MI.memberId WHERE FR.memberId.memberUuid = :memberUuid AND FR.friendStatus != false")
+	List<Member> findAllByMemberUuid(@Param("memberUuid") String memberUuid);
+
 
 }

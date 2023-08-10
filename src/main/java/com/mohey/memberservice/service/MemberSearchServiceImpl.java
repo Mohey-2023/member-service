@@ -54,6 +54,66 @@ public class MemberSearchServiceImpl implements MemberSearchService {
 		}
 		return memberList;
 	}
+
+	@Override
+	public List<MemberSearchRespDto> yourFriendSearchByNickname(String nickname, String memberUuId, String friendUuId) {
+		List<MemberSearchRespDto> memberList;
+		try {
+
+			//닉네임으로 멤버들 찾아오기
+			Member me = memberRepository.findByMemberUuid(memberUuId);
+			System.out.println(nickname);
+			List<Member> memberIdList = memberSearchRepository.findAllByMemberUuidNickname(friendUuId,nickname + "%");
+			System.out.println("getOthers");
+			System.out.println(me);
+
+			//1. 찾은 멤버들로 필요한 정보 불러오기
+			memberList = memberSearchRepository.findMemberList(memberIdList.get(0).getId(), me,me);
+			System.out.println("mmList1");
+
+			for (int i = 1; i < memberIdList.size(); i++) {
+				memberList.addAll(memberSearchRepository.findMemberList(memberIdList.get(i).getId(), me,me));
+				System.out.println("mmList2");
+			}
+
+		} catch (IndexOutOfBoundsException e) {
+			throw new CustomApiException("목록에 표시할 사용자가 없습니다.");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			throw new CustomApiException("사용자목록 가져오기 실패");
+		}
+		return memberList;
+	}
+
+	@Override
+	public List<MemberSearchRespDto> yourFriendSearch(String memberUuId, String friendUuId) {
+		List<MemberSearchRespDto> memberList;
+		try {
+
+			//닉네임으로 멤버들 찾아오기
+			Member me = memberRepository.findByMemberUuid(memberUuId);
+
+			List<Member> memberIdList = memberSearchRepository.findAllByMemberUuid(friendUuId);
+			System.out.println("getOthers");
+			System.out.println(me);
+
+			//1. 찾은 멤버들로 필요한 정보 불러오기
+			memberList = memberSearchRepository.findMemberList(memberIdList.get(0).getId(), me,me);
+			System.out.println("mmList1");
+
+			for (int i = 1; i < memberIdList.size(); i++) {
+				memberList.addAll(memberSearchRepository.findMemberList(memberIdList.get(i).getId(), me,me));
+				System.out.println("mmList2");
+			}
+
+		} catch (IndexOutOfBoundsException e) {
+			throw new CustomApiException("목록에 표시할 사용자가 없습니다.");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			throw new CustomApiException("사용자목록 가져오기 실패");
+		}
+		return memberList;
+	}
 }
 
 
