@@ -46,11 +46,11 @@ public class MemberDevice {
 	@Column(nullable = false)
 	private LocalDateTime createdDatetime;
 
-	@OneToOne(mappedBy = "memberDeviceId", fetch = LAZY)
-	private MemberDeviceAliveStatus memberDeviceAliveStatus;
+//	@OneToOne(mappedBy = "memberDeviceId", fetch = LAZY)
+//	private MemberDeviceAliveStatus memberDeviceAliveStatus;
 
-	@OneToOne(mappedBy = "memberDeviceId", fetch = LAZY)
-	private MemberDeviceNotiStatus memberDeviceNotiStatus;
+//	@OneToOne(mappedBy = "memberDeviceId", fetch = LAZY)
+//	private MemberDeviceNotiStatus memberDeviceNotiStatus;
 
 	@Builder
 	public MemberDevice(long id, Member memberId, String deviceUuid, String deviceToken, LocalDateTime createdDatetime,
@@ -60,16 +60,16 @@ public class MemberDevice {
 		this.deviceUuid = deviceUuid;
 		this.deviceToken = deviceToken;
 		this.createdDatetime = createdDatetime;
-		this.memberDeviceAliveStatus = memberDeviceAliveStatus;
-		this.memberDeviceNotiStatus = memberDeviceNotiStatus;
+		//this.memberDeviceAliveStatus = memberDeviceAliveStatus;
+	//	this.memberDeviceNotiStatus = memberDeviceNotiStatus;
 	}
 
-	public void setMemberDeviceAliveStatus(MemberDeviceAliveStatus memberDeviceAliveStatus) {
-		this.memberDeviceAliveStatus = memberDeviceAliveStatus;
-	}
+//	public void setMemberDeviceAliveStatus(MemberDeviceAliveStatus memberDeviceAliveStatus) {
+//		this.memberDeviceAliveStatus = memberDeviceAliveStatus;
+//	}
 
-	public void setMemberDeviceNotiStatus(MemberDeviceNotiStatus memberDeviceNotiStatus) {
-		this.memberDeviceNotiStatus = memberDeviceNotiStatus;
-	}
+//	public void setMemberDeviceNotiStatus(MemberDeviceNotiStatus memberDeviceNotiStatus) {
+//		this.memberDeviceNotiStatus = memberDeviceNotiStatus;
+//	}
 
 }

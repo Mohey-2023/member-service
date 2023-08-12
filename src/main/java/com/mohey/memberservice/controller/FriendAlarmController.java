@@ -45,7 +45,7 @@ public class FriendAlarmController {
 	public ResponseEntity<?> stopAlarm(@RequestBody @Valid String deviceId,
 		BindingResult bindingResult) {
 
-		MemberDeviceNotiStatus memberDeviceNotiStatus = friendAlarmService.stopAlarm(deviceId);
+		Boolean memberDeviceNotiStatus = friendAlarmService.stopAlarm(deviceId);
 
 		//알람 보내기
 		return new ResponseEntity<>(new ResponseDto<>(1, "알림변경 성공", memberDeviceNotiStatus), HttpStatus.CREATED);

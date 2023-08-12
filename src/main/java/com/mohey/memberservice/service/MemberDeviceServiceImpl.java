@@ -73,5 +73,18 @@ public class MemberDeviceServiceImpl implements MemberDeviceService {
 		}
 
 	}
+
+	@Override
+	public Boolean getAlive(String deviceUuid) {
+		Boolean result = memberDeviceNotiStatusRepository.findNotiStatusByDeviceUuid(deviceUuid);
+		try {
+			return result;
+		}catch (Exception e){
+			throw new CustomApiException("실패");
+		}
+
+		}
+
+
 }
 

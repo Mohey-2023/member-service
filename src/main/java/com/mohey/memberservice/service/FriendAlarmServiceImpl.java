@@ -55,11 +55,11 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 			}
 			;
 			FriendRequest friendRequest =
-				friendReqAlarmReqDto.toFriendRequestEntity(my, friend, null, uuid);
+					friendReqAlarmReqDto.toFriendRequestEntity(my, friend, null, uuid);
 
 			FriendRequestStatus friendRequestStatus = FriendRequestStatus.builder()
-				.status(AlarmStatusEnum.valueOf("WAIT"))
-				.build();
+					.status(AlarmStatusEnum.valueOf("WAIT"))
+					.build();
 
 			friendRequestStatus.setFriendRequest(friendRequest); // FriendRequest와 연결
 			friendRequest.setFriendRequestStatus(friendRequestStatus); // 양방향 연관관계 설정
@@ -91,23 +91,27 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 	}
 
 	@Override
-	public MemberDeviceNotiStatus stopAlarm(String deviceUuid) {
+	public Boolean stopAlarm(String deviceUuid) {
 		try {
+			System.out.println("wwweww" + deviceUuid);
 			MemberDevice memberDevice = memberDeviceRepository.findMemberDeviceByDeviceUuid(deviceUuid);
+			System.out.println("www" + memberDevice.getDeviceUuid());
 			Optional<MemberDeviceNotiStatus> latestStatus = memberDeviceNotiStatusRepository.findFirstByMemberDeviceIdOrderByCreatedDatetimeDesc(
-				memberDevice);
+					memberDevice);
 			MemberDeviceNotiStatus returnMemberDeviceNotiStatus = null;
 			if (latestStatus.isPresent()) {
 				MemberDeviceNotiStatus status = latestStatus.get();
 				MemberDeviceNotiStatus memberDeviceNotiStatus = MemberDeviceNotiStatus.builder()
-					.memberDeviceId(memberDevice)
-					.notiStatus(!status.getNotiStatus())
-					.build();
+						.memberDeviceId(memberDevice)
+						.notiStatus(!status.getNotiStatus())
+						.build();
 				returnMemberDeviceNotiStatus = memberDeviceNotiStatusRepository.save(memberDeviceNotiStatus);
+				return returnMemberDeviceNotiStatus.getNotiStatus();
+
 			} else {
 				throw new CustomApiException("등록된 기기기 아닙니다.");
 			}
-			return returnMemberDeviceNotiStatus;
+
 		} catch (DataIntegrityViolationException e) {
 			throw new CustomApiException("알림변경 실패");
 		}

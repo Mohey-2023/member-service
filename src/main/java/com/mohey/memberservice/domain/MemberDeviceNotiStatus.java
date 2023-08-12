@@ -4,14 +4,7 @@ import static javax.persistence.FetchType.*;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -31,7 +24,7 @@ public class MemberDeviceNotiStatus {
 	@Id
 	Long id;
 
-	@OneToOne(fetch = LAZY)
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "member_device_tb_id")
 	MemberDevice memberDeviceId;
 
