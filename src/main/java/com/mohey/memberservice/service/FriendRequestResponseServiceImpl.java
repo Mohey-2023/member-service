@@ -140,12 +140,15 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			}
 
 			FriendRelation friendRelation = friendRelationRepository.findByMemberIdAndFriendId(my, friend);
+			FriendRelation friendRelation2 = friendRelationRepository.findByMemberIdAndFriendId(friend, my);
 			if (!friendRelation.getFriendStatus()) {
 				throw new CustomApiException("삭제한 친구입니다.");
 			}
 			friendRelation.changeFriendStatus(!friendRelation.getFriendStatus());
+			friendRelation2.changeFriendStatus(!friendRelation2.getFriendStatus());
 
 			friendRelationStatusRepository.save(friendDeleteReqDto.toFriendRelationStatusEntity(friendRelation));
+			friendRelationStatusRepository.save(friendDeleteReqDto.toFriendRelationStatusEntity(friendRelation2));
 
 			return new FriendDeleteRespDto(friendRelation);
 		} catch (DataIntegrityViolationException e) {
