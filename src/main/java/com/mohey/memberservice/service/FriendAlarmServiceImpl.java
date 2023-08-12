@@ -44,13 +44,16 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 	@Override
 	public FriendReqAlarmRespDto sendAlarm(FriendReqAlarmReqDto friendReqAlarmReqDto, String uuid) {
 		try {
-
+			System.out.println("qq" + friendReqAlarmReqDto.getMyUuid());
+			System.out.println("qq" + friendReqAlarmReqDto.getFriendUuid());
 			Member my = memberRepository.findByMemberUuid(friendReqAlarmReqDto.getMyUuid());
 			Member friend = memberRepository.findByMemberUuid(friendReqAlarmReqDto.getFriendUuid());
 			if (my == null || friend == null) {
+				System.out.println("Ww");
 				throw new CustomApiException("사용자가 없습니다.");
 			}
-			if (!friendRelationRepository.existsByMemberIdAndFriendId(my, friend)) {
+			if (friendRelationRepository.existsByMemberIdAndFriendId(my, friend)) {
+				System.out.println("ee");
 				throw new CustomApiException("이미 친구입니다.");
 			}
 			;
@@ -90,6 +93,7 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public Boolean stopAlarm(String deviceUuid) {
 		try {
@@ -117,6 +121,7 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public List<FriendRespAlarmRespDto> getFriendReqList(String memberUuid) {
 		try {

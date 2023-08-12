@@ -28,7 +28,7 @@ public interface MemberSearchRepository extends JpaRepository<Member, Long> {
 		"LEFT JOIN MemberProfileImage MPI ON MPI.memberId = M AND MPI.createdDatetime = (SELECT MAX(mpi.createdDatetime) FROM MemberProfileImage mpi WHERE mpi.memberId = M)"
 		+
 		"LEFT JOIN FriendRelation FR ON FR.memberId = M AND FR.friendId = :friendId " +
-		"LEFT JOIN FriendRequest FRQ ON FRQ.memberId = :memberId AND FRQ.responseId = M " +
+		"LEFT JOIN FriendRequest FRQ ON FRQ.memberId = :memberId AND FRQ.responseId = M AND FRQ.createdDatetime = (SELECT MAX(frq.createdDatetime) FROM FriendRequest frq WHERE frq.memberId = :memberId AND frq.responseId = M)" +
 		"LEFT JOIN FriendRequestStatus FRS ON FRS.id = FRQ.id " +
 		"WHERE M.id = :id"
 	)
