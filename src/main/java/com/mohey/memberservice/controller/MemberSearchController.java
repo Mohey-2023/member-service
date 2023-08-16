@@ -19,7 +19,7 @@ public class MemberSearchController {
 
     private final MemberSearchService memberSearchService;
 
-    @GetMapping("/members/{memberUuId}/search/{friendNickname}")
+    @GetMapping(value ="/members/{memberUuId}/search/{friendNickname}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> Search(@PathVariable("friendNickname") String nickname, @PathVariable("memberUuId") String memberUuId){
 
         List<MemberSearchRespDto> memberSearchRespDtos = memberSearchService.Search(nickname, memberUuId);
@@ -28,7 +28,7 @@ public class MemberSearchController {
 
     }
 
-    @GetMapping("/members/{memberUuId}/{friendUuId}/search/{friendNickname}")
+    @GetMapping(value ="/members/{memberUuId}/{friendUuId}/search/{friendNickname}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> SearchYourFriendNickname(@PathVariable("friendNickname") String nickname, @PathVariable("memberUuId") String memberUuId,@PathVariable("friendUuId") String friendUuId){
 
         List<MemberSearchRespDto> memberSearchRespDtos = memberSearchService.yourFriendSearchByNickname(nickname, memberUuId, friendUuId);
@@ -37,7 +37,7 @@ public class MemberSearchController {
 
     }
 
-    @GetMapping("/members/{memberUuId}/{friendUuId}/search")
+    @GetMapping(value ="/members/{memberUuId}/{friendUuId}/search", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> SearchYourFriend( @PathVariable("memberUuId") String memberUuId,@PathVariable("friendUuId") String friendUuId){
 
         List<MemberSearchRespDto> memberSearchRespDtos = memberSearchService.yourFriendSearch(memberUuId, friendUuId);

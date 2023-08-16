@@ -6,15 +6,11 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.mohey.memberservice.domain.*;
+import com.mohey.memberservice.dto.memberalarm.NotificationDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.mohey.memberservice.domain.AlarmStatusEnum;
-import com.mohey.memberservice.domain.FriendRequest;
-import com.mohey.memberservice.domain.FriendRequestStatus;
-import com.mohey.memberservice.domain.Member;
-import com.mohey.memberservice.domain.MemberDevice;
-import com.mohey.memberservice.domain.MemberDeviceNotiStatus;
 import com.mohey.memberservice.dto.memberalarm.FriendReqAlarmReqDto;
 import com.mohey.memberservice.dto.memberalarm.FriendReqAlarmRespDto;
 import com.mohey.memberservice.dto.memberalarm.FriendRespAlarmRespDto;
@@ -68,21 +64,21 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 			friendRequestRepository.save(friendRequest); // 한 번만 저장하여 FriendRequestStatus 함께 저장
 
 			//알람 보내기
-			// MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
-			// MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
-			// List<String> deviceTokenList = new ArrayList<>();
-			// deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
-			//
-			// NotificationDto notificationDto = NotificationDto.builder()
-			// 	.topic("friend-request")
-			// 	.type("friend")
-			// 	.senderUuid(my.getMemberUuid())
-			// 	.senderName(myinfo.getNickname())
-			// 	.receiverName(youinfo.getNickname())
-			// 	.receiverUuid(friend.getMemberUuid())
-			// 	.deviceTokenList(deviceTokenList)
-			// 	.build();
-			// kafkaProducer.send("friend-request", notificationDto);
+			 MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
+			 MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
+			 List<String> deviceTokenList = new ArrayList<>();
+			 deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
+
+			 NotificationDto notificationDto = NotificationDto.builder()
+			 	.topic("friend-request")
+			 	.type("friend")
+			 	.senderUuid(my.getMemberUuid())
+			 	.senderName(myinfo.getNickname())
+			 	.receiverName(youinfo.getNickname())
+			 	.receiverUuid(friend.getMemberUuid())
+			 	.deviceTokenList(deviceTokenList)
+			 	.build();
+			 kafkaProducer.send("friend-request", notificationDto);
 
 			return new FriendReqAlarmRespDto(friendRequest);
 
