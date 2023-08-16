@@ -24,7 +24,7 @@ public class FriendSearchController {
 	private final FriendSearchService friendSearchService;
 
 	//nickName 어케 걸지..
-	@GetMapping("/{memberUuId}")
+	@GetMapping(value = "/{memberUuId}", produces = "application/json;charset=UTF-8")
 	//?search={nickName}
 	public ResponseEntity<?> SearchFriendList(@PathVariable String memberUuId) {
 		List<FriendListSearchRespDto> friendListSearchRespDtos = friendSearchService.searchFriendList(memberUuId);
@@ -33,7 +33,7 @@ public class FriendSearchController {
 
 	}
 
-	@GetMapping("/{memberUuId}/{friendNickname}")
+	@GetMapping(value = "/{memberUuId}/{friendNickname}", produces = "application/json;charset=UTF-8")
 	public ResponseEntity<?> SearchFriendInFriendList(@PathVariable("memberUuId") String memberUuId,
 		@PathVariable("friendNickname") String nickname) {
 		List<FriendInFriendListSearchRespDto> friendInFriendListSearchRespDtos = friendSearchService.SearchFriendInFriendList(
@@ -43,7 +43,7 @@ public class FriendSearchController {
 
 	}
 
-	@GetMapping("/fein/{memberUuId}")
+	@GetMapping(value = "/fein/{memberUuId}", produces = "application/json;charset=UTF-8")
 	//?search={nickName}
 	public ResponseEntity<?> FeinSearchFriendList(@PathVariable String memberUuId) {
 		List<String> friendUuid = friendSearchService.searchFeinFriendList(memberUuId);
