@@ -32,7 +32,7 @@ public interface FriendSearchRepository extends JpaRepository<FriendRelation, Lo
 		+
 		"LEFT JOIN MemberProfileImage MPI ON MPI.memberId = M AND MPI.createdDatetime = (SELECT MAX(mpi.createdDatetime) FROM MemberProfileImage mpi WHERE mpi.memberId = M)"
 		+
-		"LEFT JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = false AND FR.friendId = :friendId AND FR.memberId = M " +
+		"LEFT JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = false AND FR.friendId = M AND FR.memberId = :friendId " +
 		"WHERE M.id = :id"
 	)
 	List<FriendListSearchRespDto> findNotFavoriteFriendList(@Param("id") Long id,@Param("friendId") Member friendId);
@@ -52,7 +52,7 @@ public interface FriendSearchRepository extends JpaRepository<FriendRelation, Lo
 		+
 		"LEFT JOIN MemberProfileImage MPI ON MPI.memberId = M AND MPI.createdDatetime = (SELECT MAX(mpi.createdDatetime) FROM MemberProfileImage mpi WHERE mpi.memberId = M)"
 		+
-		"INNER JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = true AND FR.friendId = :friendId AND FR.memberId = M " +
+		"INNER JOIN FriendRelation FR ON FR.friendStatus = true AND FR.favoriteStatus = true AND FR.friendId = M AND FR.memberId =:friendId " +
 		"WHERE M.id = :id"
 	)
 	List<FriendListSearchRespDto> findFavoriteFriendList(@Param("id") Long id,@Param("friendId") Member friendId);
