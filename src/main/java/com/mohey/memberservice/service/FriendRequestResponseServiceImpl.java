@@ -83,21 +83,21 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 				friendRequestStatus.get().changeStatus(AlarmStatusEnum.valueOf("YES"));
 
 				//알람 전송
-//				 MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
-//				 MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
-//				 List<String> deviceTokenList = new ArrayList<>();
-//				 deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
-//
-//				 NotificationDto notificationDto = NotificationDto.builder()
-//				 	.topic("friend-accept")
-//				 	.type("friend")
-//				 	.senderUuid(my.getMemberUuid())
-//				 	.senderName(myinfo.getNickname())
-//				 	.receiverName(youinfo.getNickname())
-//				 	.receiverUuid(friend.getMemberUuid())
-//				 	.deviceTokenList(deviceTokenList)
-//				 	.build();
-//				 kafkaProducer.send("friend-request", notificationDto);
+				 MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
+				 MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
+				 List<String> deviceTokenList = new ArrayList<>();
+				 deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
+
+				 NotificationDto notificationDto = NotificationDto.builder()
+				 	.topic("friend-accept")
+				 	.type("friend")
+				 	.senderUuid(my.getMemberUuid())
+				 	.senderName(myinfo.getNickname())
+				 	.receiverName(youinfo.getNickname())
+				 	.receiverUuid(friend.getMemberUuid())
+				 	.deviceTokenList(deviceTokenList)
+				 	.build();
+				 kafkaProducer.send("friend-request", notificationDto);
 
 
 
