@@ -49,11 +49,9 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 			Member my = memberRepository.findByMemberUuid(friendReqAlarmReqDto.getMyUuid());
 			Member friend = memberRepository.findByMemberUuid(friendReqAlarmReqDto.getFriendUuid());
 			if (my == null || friend == null) {
-				System.out.println("Ww");
 				throw new CustomApiException("사용자가 없습니다.");
 			}
 			if (friendRelationRepository.existsByMemberIdAndFriendId(my, friend)) {
-				System.out.println("ee");
 				throw new CustomApiException("이미 친구입니다.");
 			}
 			;
