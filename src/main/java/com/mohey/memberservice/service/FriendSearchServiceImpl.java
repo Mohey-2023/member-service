@@ -83,27 +83,29 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 		try {
 			Member me = memberRepository.findByMemberUuid(memberUuId);
 
+			SearchedFriendList = friendSearchRepository.findFriendInFriendDetailsByNickname(nickname + "%", me.getId());
+
 			//검색한 닉네임인 친구 모두 찾기
-			List<Member> memberList = friendSearchRepository.findAllByNickname(nickname + "%", me);
-			System.out.println("get memberList");
-			System.out.println(memberList.size());
-
-			if (!memberList.isEmpty() && memberList.get(0).getMemberUuid().equals(memberList.get(0).getMemberUuid()))
-				memberList.remove(0);
-
-			//1. 친한 친구에 대한 정보
-			SearchedFriendList = friendSearchRepository.findFavoriteFriendById(memberList.get(0).getId(), me);
-			for (int i = 1; i < memberList.size(); i++) {
-				SearchedFriendList.addAll(
-					friendSearchRepository.findFavoriteFriendById(memberList.get(i).getId(), me));
-				//추가된 거면 제외해주기
-				if (memberList.get(memberList.size()-1).getMemberUuid().equals(memberList.get(i).getMemberUuid()))
-					memberList.remove(i);
-			}
-			//2. 그냥 친구에 대한 정보
-			for (int i = 0; i < memberList.size(); i++) {
-				SearchedFriendList.addAll(friendSearchRepository.findNotFavoriteFriendById(memberList.get(i).getId(), me));
-			}
+//			List<Member> memberList = friendSearchRepository.findAllByNickname(nickname + "%", me);
+//			System.out.println("get memberList");
+//			System.out.println(memberList.size());
+//
+//			if (!memberList.isEmpty() && memberList.get(0).getMemberUuid().equals(memberList.get(0).getMemberUuid()))
+//				memberList.remove(0);
+//
+//			//1. 친한 친구에 대한 정보
+//			SearchedFriendList = friendSearchRepository.findFavoriteFriendById(memberList.get(0).getId(), me);
+//			for (int i = 1; i < memberList.size(); i++) {
+//				SearchedFriendList.addAll(
+//					friendSearchRepository.findFavoriteFriendById(memberList.get(i).getId(), me));
+//				//추가된 거면 제외해주기
+//				if (memberList.get(memberList.size()-1).getMemberUuid().equals(memberList.get(i).getMemberUuid()))
+//					memberList.remove(i);
+//			}
+//			//2. 그냥 친구에 대한 정보
+//			for (int i = 0; i < memberList.size(); i++) {
+//				SearchedFriendList.addAll(friendSearchRepository.findNotFavoriteFriendById(memberList.get(i).getId(), me));
+//			}
 		} catch (IndexOutOfBoundsException e) {
 
 			System.out.println(e.getMessage());
