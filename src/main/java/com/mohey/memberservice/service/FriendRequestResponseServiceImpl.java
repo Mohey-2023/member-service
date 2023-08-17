@@ -70,7 +70,7 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 					throw new CustomApiException("이미 친구입니다");
 				} else {
 					friendRelation.changeFriendStatus(!friendRelation.getFriendStatus());
-					friendRelation2.changeFavoriteStatus(!friendRelation2.getFavoriteStatus());
+					friendRelation2.changeFriendStatus(!friendRelation2.getFriendStatus());
 					friendRelationStatusRepository.save(
 						friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
 					friendRelationStatusRepository.save(
