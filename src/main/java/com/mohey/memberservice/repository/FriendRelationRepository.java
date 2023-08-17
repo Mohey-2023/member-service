@@ -8,6 +8,6 @@ import com.mohey.memberservice.domain.Member;
 public interface FriendRelationRepository extends JpaRepository<FriendRelation, Long> {
 	FriendRelation findByMemberIdAndFriendId(Member my, Member You);
 
-	boolean existsByMemberIdAndFriendId(Member my, Member You);
+	boolean existsByMemberIdAndFriendIdAndFriendStatusTrue(Member my, Member You);
 
 }

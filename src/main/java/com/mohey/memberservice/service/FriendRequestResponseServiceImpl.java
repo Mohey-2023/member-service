@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.mohey.memberservice.domain.*;
-import com.mohey.memberservice.dto.memberalarm.NotificationDto;
-import com.mohey.memberservice.kafka.KafkaProducer;
-import com.mohey.memberservice.repository.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mohey.memberservice.domain.AlarmStatusEnum;
+import com.mohey.memberservice.domain.FriendRelation;
+import com.mohey.memberservice.domain.FriendRequest;
+import com.mohey.memberservice.domain.FriendRequestStatus;
+import com.mohey.memberservice.domain.Member;
+import com.mohey.memberservice.domain.MemberInfo;
 import com.mohey.memberservice.dto.memberFriend.FriendDeleteReqDto;
 import com.mohey.memberservice.dto.memberFriend.FriendDeleteRespDto;
 import com.mohey.memberservice.dto.memberFriend.FriendRegisterReqDto;
@@ -19,7 +21,17 @@ import com.mohey.memberservice.dto.memberFriend.FriendRegisterRespDto;
 import com.mohey.memberservice.dto.memberFriend.FriendStarReqDto;
 import com.mohey.memberservice.dto.memberFriend.FriendStarRespDto;
 import com.mohey.memberservice.dto.memberalarm.AlarmRequest;
+import com.mohey.memberservice.dto.memberalarm.NotificationDto;
 import com.mohey.memberservice.ex.CustomApiException;
+import com.mohey.memberservice.kafka.KafkaProducer;
+import com.mohey.memberservice.repository.FriendRelationFavoriteStatusRepository;
+import com.mohey.memberservice.repository.FriendRelationRepository;
+import com.mohey.memberservice.repository.FriendRelationStatusRepository;
+import com.mohey.memberservice.repository.FriendRequestRepository;
+import com.mohey.memberservice.repository.FriendRequestStatusRepository;
+import com.mohey.memberservice.repository.MemberDeviceRepository;
+import com.mohey.memberservice.repository.MemberInfoRepository;
+import com.mohey.memberservice.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,8 +59,9 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			if (my == null || friend == null) {
 				throw new CustomApiException("사용자가 없습니다.");
 			}
-			boolean alreadyFriend = friendRelationRepository.existsByMemberIdAndFriendId(my, friend);
-			boolean alreadyFriend2 = friendRelationRepository.existsByMemberIdAndFriendId(friend, my);
+			boolean alreadyFriend = friendRelationRepository.existsByMemberIdAndFriendIdAndFriendStatusTrue(my, friend);
+			boolean alreadyFriend2 = friendRelationRepository.existsByMemberIdAndFriendIdAndFriendStatusTrue(friend,
+				my);
 			//이미 친구가 있을떄는 에러 또는 상태변경
 			if (alreadyFriend || alreadyFriend2) {
 				FriendRelation friendRelation = friendRelationRepository.findByMemberIdAndFriendId(my, friend);
@@ -83,23 +96,21 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 				friendRequestStatus.get().changeStatus(AlarmStatusEnum.valueOf("YES"));
 
 				//알람 전송
-				 MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
-				 MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
-				 List<String> deviceTokenList = new ArrayList<>();
-				 deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
+				MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
+				MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
+				List<String> deviceTokenList = new ArrayList<>();
+				deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
 
-				 NotificationDto notificationDto = NotificationDto.builder()
-				 	.topic("friend-accept")
-				 	.type("friend")
-				 	.senderUuid(my.getMemberUuid())
-				 	.senderName(myinfo.getNickname())
-				 	.receiverName(youinfo.getNickname())
-				 	.receiverUuid(friend.getMemberUuid())
-				 	.deviceTokenList(deviceTokenList)
-				 	.build();
-				 kafkaProducer.send("friend-request", notificationDto);
-
-
+				NotificationDto notificationDto = NotificationDto.builder()
+					.topic("friend-accept")
+					.type("friend")
+					.senderUuid(my.getMemberUuid())
+					.senderName(myinfo.getNickname())
+					.receiverName(youinfo.getNickname())
+					.receiverUuid(friend.getMemberUuid())
+					.deviceTokenList(deviceTokenList)
+					.build();
+				kafkaProducer.send("friend-request", notificationDto);
 
 			} else {
 				throw new CustomApiException("친구요청 상태변경 실패");
@@ -121,7 +132,7 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			if (my == null || friend == null) {
 				throw new CustomApiException("사용자가 없습니다.");
 			}
-			boolean alreadyFriend = friendRelationRepository.existsByMemberIdAndFriendId(my, friend);
+			boolean alreadyFriend = friendRelationRepository.existsByMemberIdAndFriendIdAndFriendStatusTrue(my, friend);
 			if (!alreadyFriend) {
 				throw new CustomApiException("친구가 아닙니다.");
 			}
@@ -151,7 +162,7 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			if (my == null || friend == null) {
 				throw new CustomApiException("사용자가 없습니다.");
 			}
-			boolean alreadyFriend = friendRelationRepository.existsByMemberIdAndFriendId(my, friend);
+			boolean alreadyFriend = friendRelationRepository.existsByMemberIdAndFriendIdAndFriendStatusTrue(my, friend);
 			if (!alreadyFriend) {
 				throw new CustomApiException("친구가 아닙니다.");
 			}

@@ -6,14 +6,20 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import com.mohey.memberservice.domain.*;
-import com.mohey.memberservice.dto.memberalarm.NotificationDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.mohey.memberservice.domain.AlarmStatusEnum;
+import com.mohey.memberservice.domain.FriendRequest;
+import com.mohey.memberservice.domain.FriendRequestStatus;
+import com.mohey.memberservice.domain.Member;
+import com.mohey.memberservice.domain.MemberDevice;
+import com.mohey.memberservice.domain.MemberDeviceNotiStatus;
+import com.mohey.memberservice.domain.MemberInfo;
 import com.mohey.memberservice.dto.memberalarm.FriendReqAlarmReqDto;
 import com.mohey.memberservice.dto.memberalarm.FriendReqAlarmRespDto;
 import com.mohey.memberservice.dto.memberalarm.FriendRespAlarmRespDto;
+import com.mohey.memberservice.dto.memberalarm.NotificationDto;
 import com.mohey.memberservice.ex.CustomApiException;
 import com.mohey.memberservice.kafka.KafkaProducer;
 import com.mohey.memberservice.repository.FriendRelationRepository;
@@ -47,16 +53,16 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 			if (my == null || friend == null) {
 				throw new CustomApiException("사용자가 없습니다.");
 			}
-			if (friendRelationRepository.existsByMemberIdAndFriendId(my, friend)) {
+			if (friendRelationRepository.existsByMemberIdAndFriendIdAndFriendStatusTrue(my, friend)) {
 				throw new CustomApiException("이미 친구입니다.");
 			}
 			;
 			FriendRequest friendRequest =
-					friendReqAlarmReqDto.toFriendRequestEntity(my, friend, null, uuid);
+				friendReqAlarmReqDto.toFriendRequestEntity(my, friend, null, uuid);
 
 			FriendRequestStatus friendRequestStatus = FriendRequestStatus.builder()
-					.status(AlarmStatusEnum.valueOf("WAIT"))
-					.build();
+				.status(AlarmStatusEnum.valueOf("WAIT"))
+				.build();
 
 			friendRequestStatus.setFriendRequest(friendRequest); // FriendRequest와 연결
 			friendRequest.setFriendRequestStatus(friendRequestStatus); // 양방향 연관관계 설정
@@ -64,21 +70,21 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 			friendRequestRepository.save(friendRequest); // 한 번만 저장하여 FriendRequestStatus 함께 저장
 
 			//알람 보내기
-			 MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
-			 MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
-			 List<String> deviceTokenList = new ArrayList<>();
-			 deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
+			MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
+			MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
+			List<String> deviceTokenList = new ArrayList<>();
+			deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
 
-			 NotificationDto notificationDto = NotificationDto.builder()
-			 	.topic("friend-request")
-			 	.type("friend")
-			 	.senderUuid(my.getMemberUuid())
-			 	.senderName(myinfo.getNickname())
-			 	.receiverName(youinfo.getNickname())
-			 	.receiverUuid(friend.getMemberUuid())
-			 	.deviceTokenList(deviceTokenList)
-			 	.build();
-			 kafkaProducer.send("friend-request", notificationDto);
+			NotificationDto notificationDto = NotificationDto.builder()
+				.topic("friend-request")
+				.type("friend")
+				.senderUuid(my.getMemberUuid())
+				.senderName(myinfo.getNickname())
+				.receiverName(youinfo.getNickname())
+				.receiverUuid(friend.getMemberUuid())
+				.deviceTokenList(deviceTokenList)
+				.build();
+			kafkaProducer.send("friend-request", notificationDto);
 
 			return new FriendReqAlarmRespDto(friendRequest);
 
@@ -95,14 +101,14 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 			MemberDevice memberDevice = memberDeviceRepository.findMemberDeviceByDeviceUuid(deviceUuid);
 			System.out.println("www" + memberDevice.getDeviceUuid());
 			Optional<MemberDeviceNotiStatus> latestStatus = memberDeviceNotiStatusRepository.findFirstByMemberDeviceIdOrderByCreatedDatetimeDesc(
-					memberDevice);
+				memberDevice);
 			MemberDeviceNotiStatus returnMemberDeviceNotiStatus = null;
 			if (latestStatus.isPresent()) {
 				MemberDeviceNotiStatus status = latestStatus.get();
 				MemberDeviceNotiStatus memberDeviceNotiStatus = MemberDeviceNotiStatus.builder()
-						.memberDeviceId(memberDevice)
-						.notiStatus(!status.getNotiStatus())
-						.build();
+					.memberDeviceId(memberDevice)
+					.notiStatus(!status.getNotiStatus())
+					.build();
 				returnMemberDeviceNotiStatus = memberDeviceNotiStatusRepository.save(memberDeviceNotiStatus);
 				return returnMemberDeviceNotiStatus.getNotiStatus();
 
