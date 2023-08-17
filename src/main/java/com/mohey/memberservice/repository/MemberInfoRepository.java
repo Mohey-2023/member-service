@@ -44,7 +44,7 @@ public interface MemberInfoRepository extends JpaRepository<MemberInfo, Long> {
 		+
 		"LEFT JOIN FriendRequest FRQ ON FRQ.memberId = :member AND FRQ.responseId = :friend AND FRQ.createdDatetime = (SELECT MAX(frq.createdDatetime) FROM FriendRequest frq WHERE frq.memberId = :member AND frq.responseId = :friend)"
 		+
-		"LEFT JOIN FriendRequestStatus FRS ON FRS.id = FRQ.id AND FRS.createdDatetime = (SELECT MAX(frs.createdDatetime) FROM FriendRequestStatus frs WHERE frs.id = FRQ.id)"
+		"LEFT JOIN FriendRequestStatus FRS ON FRS.id = FRQ.id "
 		+
 		"WHERE M = :friend")
 	GetYourInfoRespDto getYourInfo(@Param("member") Member member, @Param("friend") Member friend);

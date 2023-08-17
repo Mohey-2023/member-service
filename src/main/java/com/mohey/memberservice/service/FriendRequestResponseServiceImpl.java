@@ -59,8 +59,8 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			if (my == null || friend == null) {
 				throw new CustomApiException("사용자가 없습니다.");
 			}
-			boolean alreadyFriend = friendRelationRepository.existsByMemberIdAndFriendIdAndFriendStatusTrue(my, friend);
-			boolean alreadyFriend2 = friendRelationRepository.existsByMemberIdAndFriendIdAndFriendStatusTrue(friend,
+			boolean alreadyFriend = friendRelationRepository.existsByMemberIdAndFriendId(my, friend);
+			boolean alreadyFriend2 = friendRelationRepository.existsByMemberIdAndFriendId(friend,
 				my);
 			//이미 친구가 있을떄는 에러 또는 상태변경
 			if (alreadyFriend || alreadyFriend2) {

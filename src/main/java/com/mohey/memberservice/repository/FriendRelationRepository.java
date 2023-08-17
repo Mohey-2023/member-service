@@ -10,4 +10,6 @@ public interface FriendRelationRepository extends JpaRepository<FriendRelation, 
 
 	boolean existsByMemberIdAndFriendIdAndFriendStatusTrue(Member my, Member You);
 
+	boolean existsByMemberIdAndFriendId(Member my, Member You);
+
 }
