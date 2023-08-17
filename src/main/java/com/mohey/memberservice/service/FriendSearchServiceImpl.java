@@ -27,10 +27,12 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 		List<FriendListSearchRespDto> friendList;
 		try {
 			Member my = memberRepository.findByMemberUuid(memberUuId);
+
+			friendList = friendSearchRepository.findFriendDetailsByMemberId(my.getId());
 			//System.out.println("getMy");
 
 			//친구인 사용자 멤버 객체로 쭉 불러오기
-			List<Member> friendIdList = friendSearchRepository.findAllByMemberId(my.getId());
+			//List<Member> friendIdList = friendSearchRepository.findAllByMemberId(my.getId());
 			 //System.out.println("getFriendIdList");
 			//System.out.println(friendIdList.toString());
 			//System.out.println(friendIdList.size());
@@ -43,25 +45,26 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 			///!!!!!!여기서 추가해줬으면 리스트에서 빼자 !!!!!!!!
 
 			//친한 친구 불러오기 << 여기서 favorite_status = null이 추가된다 왜지?? 계속 나에 대한 정보를 불러왔어서 그런듯
-			friendList = friendSearchRepository.findFavoriteFriendList(friendIdList.get(0).getId(),my);
-			if (!friendList.isEmpty() && friendList.get(0).getMemberUuid().equals(friendIdList.get(0).getMemberUuid()))
-				friendIdList.remove(0);
+			//즐겨찾기를 하지 않으면 친구 목록이 뜨지 않는다...왜지?
+//			friendList = friendSearchRepository.findFavoriteFriendList(friendIdList.get(0).getId(),my);
+//			if (!friendList.isEmpty() && friendList.get(0).getMemberUuid().equals(friendIdList.get(0).getMemberUuid()))
+//				friendIdList.remove(0);
 
 			//System.out.println(friendIdList.size());
-			for (int i = 1; i < friendIdList.size(); i++) {
-				friendList.addAll(friendSearchRepository.findFavoriteFriendList(friendIdList.get(i).getId(),my));
-				//들어갔으면
-				if (friendList.get(friendList.size()-1).getMemberUuid().equals(friendIdList.get(i).getMemberUuid()))
-					friendIdList.remove(i);
-			}
+//			for (int i = 1; i < friendIdList.size(); i++) {
+//				friendList.addAll(friendSearchRepository.findFavoriteFriendList(friendIdList.get(i).getId(),my));
+//				//들어갔으면
+//				if (friendList.get(friendList.size()-1).getMemberUuid().equals(friendIdList.get(i).getMemberUuid()))
+//					friendIdList.remove(i);
+//			}
 			//System.out.println(friendIdList.size());
 
 			//그냥 친구 불러오기
 			//친한 친구...인걸 여기서도 불러오는구나
-			for (int i = 0; i < friendIdList.size(); i++) {
-				friendList.addAll(friendSearchRepository.findNotFavoriteFriendList(friendIdList.get(i).getId(),my));
-				//System.out.println("i: "+ i);
-			}
+//			for (int i = 0; i < friendIdList.size(); i++) {
+//				friendList.addAll(friendSearchRepository.findNotFavoriteFriendList(friendIdList.get(i).getId(),my));
+//				System.out.println("i: "+ i);
+//			}
 			//System.out.println(friendList.size());
 			//notFavoriteFriendList.addAll(favoriteFriendList) 이거는 리스트를 반환해주는 게아님 !! 함수
 
@@ -85,15 +88,17 @@ public class FriendSearchServiceImpl implements FriendSearchService {
 			System.out.println("get memberList");
 			System.out.println(memberList.size());
 
-			for (int i = 0; i < memberList.size(); i++) {
-				System.out.println(memberList.get(i).toString());
-			}
+			if (!memberList.isEmpty() && memberList.get(0).getMemberUuid().equals(memberList.get(0).getMemberUuid()))
+				memberList.remove(0);
 
 			//1. 친한 친구에 대한 정보
 			SearchedFriendList = friendSearchRepository.findFavoriteFriendById(memberList.get(0).getId(), me);
 			for (int i = 1; i < memberList.size(); i++) {
 				SearchedFriendList.addAll(
 					friendSearchRepository.findFavoriteFriendById(memberList.get(i).getId(), me));
+				//추가된 거면 제외해주기
+				if (memberList.get(memberList.size()-1).getMemberUuid().equals(memberList.get(i).getMemberUuid()))
+					memberList.remove(i);
 			}
 			//2. 그냥 친구에 대한 정보
 			for (int i = 0; i < memberList.size(); i++) {
