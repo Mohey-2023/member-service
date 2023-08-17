@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.mohey.memberservice.domain.FriendRequest;
+import com.mohey.memberservice.domain.Member;
 import com.mohey.memberservice.dto.memberalarm.FriendRespAlarmRespDto;
 
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long> {
@@ -28,5 +29,9 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
 		"INNER JOIN FriendRequestStatus FRS ON FRS.friendRequest.id = FR.id AND FRS.status = 'WAIT' " +
 		"WHERE FR.responseId.id = :id")
 	List<FriendRespAlarmRespDto> getFriendReqList(@Param("id") Long id);
+
+	@Query("SELECT fr.id FROM FriendRequest fr WHERE fr.memberId = :memberId AND fr.responseId = :responseId AND fr.createdDatetime = (SELECT MAX(f.createdDatetime) FROM FriendRequest f WHERE f.memberId = :memberId AND f.responseId = :responseId)")
+	Long findLatestIdByMemberIdAndResponseId(@Param("memberId") Member memberId,
+		@Param("responseId") Member responseId);
 
 }

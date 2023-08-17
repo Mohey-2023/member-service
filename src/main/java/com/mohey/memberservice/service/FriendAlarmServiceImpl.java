@@ -24,6 +24,7 @@ import com.mohey.memberservice.ex.CustomApiException;
 import com.mohey.memberservice.kafka.KafkaProducer;
 import com.mohey.memberservice.repository.FriendRelationRepository;
 import com.mohey.memberservice.repository.FriendRequestRepository;
+import com.mohey.memberservice.repository.FriendRequestStatusRepository;
 import com.mohey.memberservice.repository.MemberDeviceNotiStatusRepository;
 import com.mohey.memberservice.repository.MemberDeviceRepository;
 import com.mohey.memberservice.repository.MemberInfoRepository;
@@ -41,13 +42,12 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 	private final FriendRequestRepository friendRequestRepository;
 	private final KafkaProducer kafkaProducer;
 	private final FriendRelationRepository friendRelationRepository;
+	private final FriendRequestStatusRepository friendRequestStatusRepository;
 
 	@Transactional
 	@Override
 	public FriendReqAlarmRespDto sendAlarm(FriendReqAlarmReqDto friendReqAlarmReqDto, String uuid) {
 		try {
-			System.out.println("qq" + friendReqAlarmReqDto.getMyUuid());
-			System.out.println("qq" + friendReqAlarmReqDto.getFriendUuid());
 			Member my = memberRepository.findByMemberUuid(friendReqAlarmReqDto.getMyUuid());
 			Member friend = memberRepository.findByMemberUuid(friendReqAlarmReqDto.getFriendUuid());
 			if (my == null || friend == null) {
@@ -57,6 +57,10 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 				throw new CustomApiException("이미 친구입니다.");
 			}
 			;
+			Long id = friendRequestRepository.findLatestIdByMemberIdAndResponseId(my, friend);
+			if (friendRequestStatusRepository.existsByIdAndStatus(id, AlarmStatusEnum.WAIT)) {
+				throw new CustomApiException("이미 요청한 친구 입니다.");
+			}
 			FriendRequest friendRequest =
 				friendReqAlarmReqDto.toFriendRequestEntity(my, friend, null, uuid);
 
@@ -97,9 +101,7 @@ public class FriendAlarmServiceImpl implements FriendAlarmService {
 	@Override
 	public Boolean stopAlarm(String deviceUuid) {
 		try {
-			System.out.println("wwweww" + deviceUuid);
 			MemberDevice memberDevice = memberDeviceRepository.findMemberDeviceByDeviceUuid(deviceUuid);
-			System.out.println("www" + memberDevice.getDeviceUuid());
 			Optional<MemberDeviceNotiStatus> latestStatus = memberDeviceNotiStatusRepository.findFirstByMemberDeviceIdOrderByCreatedDatetimeDesc(
 				memberDevice);
 			MemberDeviceNotiStatus returnMemberDeviceNotiStatus = null;
