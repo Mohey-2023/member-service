@@ -75,6 +75,35 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 						friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation));
 					friendRelationStatusRepository.save(
 						friendRegisterReqDto.toFriendRelationStatusEntity(friendRelation2));
+					FriendRequest friendRequest = friendRequestRepository.findFriendRequestByAlarmUuid(
+						friendRegisterReqDto.getAlarmUuid());
+
+					Optional<FriendRequestStatus> friendRequestStatus = friendRequestStatusRepository.findById(
+						friendRequest.getId());
+
+					if (friendRequestStatus.isPresent()) {
+						friendRequestStatus.get().changeStatus(AlarmStatusEnum.valueOf("YES"));
+
+						//알람 전송
+						MemberInfo myinfo = memberInfoRepository.findMemberInfoByMemberId(my);
+						MemberInfo youinfo = memberInfoRepository.findMemberInfoByMemberId(friend);
+						List<String> deviceTokenList = new ArrayList<>();
+						deviceTokenList = memberDeviceRepository.getDeviceToken(friend);
+
+						NotificationDto notificationDto = NotificationDto.builder()
+							.topic("friend-accept")
+							.type("friend")
+							.senderUuid(my.getMemberUuid())
+							.senderName(myinfo.getNickname())
+							.receiverName(youinfo.getNickname())
+							.receiverUuid(friend.getMemberUuid())
+							.deviceTokenList(deviceTokenList)
+							.build();
+						kafkaProducer.send("friend-request", notificationDto);
+
+					} else {
+						throw new CustomApiException("친구요청 상태변경 실패");
+					}
 					return new FriendRegisterRespDto(friendRelation);
 				}
 			}
