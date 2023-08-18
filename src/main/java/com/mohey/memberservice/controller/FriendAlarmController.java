@@ -51,7 +51,7 @@ public class FriendAlarmController {
 		return new ResponseEntity<>(new ResponseDto<>(1, "알림변경 성공", memberDeviceNotiStatus), HttpStatus.CREATED);
 	}
 
-	@GetMapping("/{memberUuid}/getFriendReqList")
+	@GetMapping(value = "/{memberUuid}/getFriendReqList", produces = "application/json;charset=UTF-8")
 	public ResponseEntity<?> getFriendReqList(@PathVariable String memberUuid) {
 		List<FriendRespAlarmRespDto> friendRespAlarmRespDtoList = new ArrayList<>();
 		friendRespAlarmRespDtoList = friendAlarmService.getFriendReqList(memberUuid);
