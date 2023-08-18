@@ -203,6 +203,8 @@ public class FriendRequestResponseServiceImpl implements FriendRequestResponseSe
 			}
 			friendRelation.changeFriendStatus(!friendRelation.getFriendStatus());
 			friendRelation2.changeFriendStatus(!friendRelation2.getFriendStatus());
+			friendRelation.changeFavoriteStatus(false);
+			friendRelation2.changeFavoriteStatus(false);
 
 			friendRelationStatusRepository.save(friendDeleteReqDto.toFriendRelationStatusEntity(friendRelation));
 			friendRelationStatusRepository.save(friendDeleteReqDto.toFriendRelationStatusEntity(friendRelation2));
